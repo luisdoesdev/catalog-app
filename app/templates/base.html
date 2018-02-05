@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title></title>
+        <style>
+            .container{
+                width:100%;
+                overflow: hidden;
+            }
+
+            .category{
+                width: 300px;
+                float: left;
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        <h6><a href="/">home</a></h6>
+        {% block content %}{% endblock %}
+        {% block product %} {% endblock %}
+
+    </body>
+    <footer>
+        copyright @ Luis E Torruella
+    </footer>
+</html>       
