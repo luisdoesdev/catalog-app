@@ -16,7 +16,7 @@
     <div id="signinButton">
             <span class="g-signin"
               data-scope="openid email"
-              data-clientid="YOUR_CLIENT_ID_GOES_HERE.apps.googleusercontent.com"
+              data-clientid="682221223878-tlk5mp8m3uie8alomg5ukgaio03bd3fk.apps.googleusercontent.com"
               data-redirecturi="postmessage"
               data-accesstype="offline"
               data-cookiepolicy="single_host_origin"
@@ -30,3 +30,41 @@
   
   <!--END GOOGLE PLUS SIGN IN BUTTON -->
 </body>
+
+<div>   
+<!-- Call Back Method -->
+<script>
+
+    function signInCallback(authResult){
+        // if the auth result is code that means it was succesful
+        if(authResult['code']){ 
+            //Hide google sign in button
+            $('#signinButton').attr('style', 'display:none')
+            // Create an ajax method to pass the cliens one time code to the server
+            $.ajax({
+                type:'POST',
+                // pass it into my server
+                url:'/gconnect?state={{STATE}}',
+                // Dont process the data into a string
+                processData: false,
+                contentType:"application/octect-stream; charset=utf-8",
+                data: authResult['code'],
+                success: function(result){
+                    if(result){
+                        $('#result').html('Login Succesful </br>' + result + '</br> Rederecting...')
+                        setTimeout(function(){
+                            window.location.href='/'
+                        },4000);
+                    }else if (authResult['error']){
+                        console.log('there was an error ' + authResult['error'])
+
+                    }else {
+                        $('#result').html('Failed server call check the conf')
+                    }
+                } 
+            })
+        } 
+    }
+
+
+</script>

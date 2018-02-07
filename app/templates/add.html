@@ -1,0 +1,24 @@
+
+		<div class="col-md-6 col-md-offset-1 padding-top">
+			<form action="/add" method="post">
+				<div class="form-group">
+					<label for="name">Name:</label>
+                </br>
+                    <input type ="text" maxlength="50" class="form-control" name="name"placeholder="Item Name">
+
+                </br>
+					<label for="description">Description:</label>
+                </br>
+                    <textarea class="form-control" maxlength="250" rows="3" name="description" placeholder="Description of the course"></textarea>
+                </br>
+                    <select name="categories" id="">
+                        {% for c in category%}
+                        <option value="{{c.id}}">{{c.name}}</option>
+                        {% endfor %}
+                    </select> 
+                    <input type="submit" value="Submit">
+                
+                </div>
+			</form>
+		</div>
+	</div>
