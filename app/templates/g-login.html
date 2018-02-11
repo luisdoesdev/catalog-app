@@ -1,15 +1,8 @@
-<head> 
-    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
-   </script>
- 
- <script src="//apis.google.com/js/platform.js?onload=start"> </script>
- 
- <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
- 
-</head>
 
-<body>
+{% extends 'index.html' %}
+{% block login %}
+
+
     <!-- GOOGLE PLUS SIGN IN BUTTON-->
 
           
@@ -23,13 +16,12 @@
               data-callback="signInCallback"
               data-approvalprompt="force">
             </span>
-          </div>
+    </div>
+  
+  {%endblock%}
   
   
-  
-  
-  <!--END GOOGLE PLUS SIGN IN BUTTON -->
-</body>
+ 
 
 <div>   
 <!-- Call Back Method -->

@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+
+{% block items %}
+<div class="container">
+
+        <div class="category">
+            
+            {% for c in categories %}
+                <h2><a href="{{url_for('catalog_items', category=c.name)}}">
+                    {{c.name}}
+                </a></h2>
+         
+            {% endfor %}
+        </div>
+
+        <div>
+            <h3>  {{categoryName}} ({{itemCount}} {{itemCountString}})</h3>
+            <ul>
+            {% for i in items %} 
+                <li>
+                   <a href="{{url_for('item_description',category=categoryName, item=i.name)}}"> {{i.name}}</a>
+                </li>
+                
+            {% endfor %}
+            </ul>
+        </div>
+</div>        
+
+{% endblock %}

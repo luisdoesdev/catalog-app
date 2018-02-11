@@ -1,27 +1,99 @@
 <html>
     <head>
         <title></title>
-        <style>
-            .container{
-                width:100%;
-                overflow: hidden;
-            }
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+      <link rel="stylesheet" href="../static/css/style.css">  
+    
+         <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+   </script>
+ 
+ <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 
-            .category{
-                width: 300px;
-                float: left;
-            }
-            
-            
-        </style>
+
     </head>
     <body>
-        <h6><a href="/">home</a></h6>
-        {% block content %}{% endblock %}
-        {% block product %} {% endblock %}
+            <nav class="navbar navbar-light bg-light">
+                   <h3><a href="/">Catalog</a></h3>
 
-    </body>
-    <footer>
-        copyright @ Luis E Torruella
-    </footer>
+                   <span id="signinButton" class="g-signin"
+                   data-scope="openid email"
+                   data-clientid="682221223878-tlk5mp8m3uie8alomg5ukgaio03bd3fk.apps.googleusercontent.com"
+                   data-redirecturi="postmessage"
+                   data-accesstype="offline"
+                   data-cookiepolicy="single_host_origin"
+                   data-callback="signInCallback"
+                   data-approvalprompt="force"> 
+                            <button class="btn btn-default">
+                                Login
+                            </button>
+                            </span>
+                    
+
+            </nav>
+            <div class="container">
+
+                     <!--- render content -->
+                     {% block content %}{% endblock %}
+                     
+                     <!--Render Products-->
+                     {% block iitemDescription %} {% endblock %}
+                     
+                     <!-- Renders items -->
+            {% block items%}{%endblock%}
+            
+            <!-- Render edit  -->
+            {% block edit %} {% endblock %}
+            
+            <!---  Render add-->
+            {% block add%} {% endblock %}
+            
+            </div>
+        </body>
+        <footer class="footer">
+            <div class="container">
+                <span class="text-muted">copyright Luis E Torruella</span>
+            </div>
+          </footer>
+
+    <script>
+
+            function signInCallback(authResult){
+                // if the auth result is code that means it was succesful
+                if(authResult['code']){ 
+                    //Hide google sign in button
+                    $('#signinButton').attr('style', 'display:none')
+                    // Create an ajax method to pass the cliens one time code to the server
+                    $.ajax({
+                        type:'POST',
+                        // pass it into my server
+                        url:'/gconnect?state={{STATE}}',
+                        // Dont process the data into a string
+                        processData: false,
+                        contentType:"application/octect-stream; charset=utf-8",
+                        data: authResult['code'],
+                        success: function(result){
+                            if(result){
+                                $('#result').html('Login Succesful </br>' + result + '</br> Rederecting...')
+                                setTimeout(function(){
+                                    window.location.href='/'
+                                },4000);
+                            }else if (authResult['error']){
+                                console.log('there was an error ' + authResult['error'])
+        
+                            }else {
+                                $('#result').html('Failed server call check the conf')
+                            }
+                        } 
+                    })
+                } 
+            }
+        
+        
+        </script>
+        
+
 </html>       
