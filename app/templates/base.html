@@ -16,11 +16,15 @@
 
     </head>
     <body>
-        {% if username in loging%} Yeya{%endif%}
-            <nav class="navbar ">
-                <div class="container container-nav">
-                   <h3><a class="brand-name"href="/">Catalog</a></h3>
-
+        <nav class="navbar ">
+            <div class="container container-nav">
+                <h3><a class="brand-name"href="/">Catalog</a></h3>
+                
+                {% if username == no%}
+                <button  class="btn btn-default">
+                       <a style="color:#fff !important;"href="/gdisconnect"> Logout </a>
+                    </button>
+                {% else %}
                    <span id="signinButton" class="g-signin"
                    data-scope="openid email"
                    data-clientid="682221223878-tlk5mp8m3uie8alomg5ukgaio03bd3fk.apps.googleusercontent.com"
@@ -35,6 +39,7 @@
                             </button>
                     </span>
                 </div>
+                {%endif%}
 
             </nav>
             <div class="container container-content">

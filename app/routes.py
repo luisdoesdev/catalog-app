@@ -40,7 +40,7 @@ def show_login():
 @app.route('/gconnect', methods=['GET','POST'])
 def gconnect():
    
-
+    
     if request.args.get('state')!= login_session['state']:
         response = make_response(json.dumps('Invalid State parameter id'), 401)
         response.headers['Content-Type'] = 'aplication/json'
@@ -187,14 +187,16 @@ def not_foud(e):
 def index():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
     for x in range(32))
-    login_session['state'] = state
+      
+    login_session['username'] = "no"
+    if login_session['username']:
+        login_session['username'] = login_session['username']
     
-    print(login_session)
     categories = session.query(Category).all()
     items = session.query(Item).all()
      
     
-    return render_template('index.html', items=items, categories=categories, STATE=state)
+    return render_template('index.html', items=items, categories=categories, STATE=state, username=login_session['username'])
 
 @app.route('/catalog/<category>/items')
 def catalog_items(category):
