@@ -1,18 +1,25 @@
-<body>
+
+{%  extends 'base.html'  %}
+
+{% block delete %}
+<div class="row" style="padding:5%;"></div>
         <div class="center">
-            <h1><a href="/">Restaurant</a></h1>
+            
             
             <form action="#" method="post">
                 
-                <h1>Are you sure you want to delete ?  {{item.name}}</h1>
+                <h1>Are you sure you want to delete ?  <span style="color:#E64A19;">{{item.name}}</h1>
                     
             
          
-        
-            <input type="submit" value="Submit">
-            <a href="/restaurant/2/menu">cancel</a>
-        
+            <div style="padding-top:5%;">
+
+                <input class="btn btn-default" type="submit" value="Submit">
+                <a style="color:#001F3F !important;"href="/restaurant/2/menu">cancel</a>
+                
+            </div>    
         
         </form>
         </div>
-</body>
+    </div>
+{%endblock%}    

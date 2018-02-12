@@ -1,13 +1,14 @@
 {%  extends 'base.html'  %}
-{% block itemDescription%}
+{% block itemDescription %}
 
 
-    <div>
-<h1>{{item.name}}</h1>
-<p>{{item.description}}</p>
+<div style="padding:4%;">
+    <h1>{{item.name}}</h1>
+    <p>{{item.description}}</p>
 
-<a href="#">Edit</a>
-<a href="#">New</a>
+    <a href="#" >Edit<span style="padding:5px; color:black;"> |</span> </a>
+    
+    <a href="#">Delete</a>
 
 </div>
 

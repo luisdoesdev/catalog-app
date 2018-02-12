@@ -26,17 +26,21 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
+'''
+Make Login FLOW
+Fix The Layout
+ADD CRUD
+ADD JSON
 
 @app.route('/login')
 def show_login():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-    for x in range(32))
-    login_session['state'] = state
-    return render_template('g-login.html', STATE=state)
+  '''
 
 
-@app.route('/gconnect', methods=['POST'])
+@app.route('/gconnect', methods=['GET','POST'])
 def gconnect():
+   
+
     if request.args.get('state')!= login_session['state']:
         response = make_response(json.dumps('Invalid State parameter id'), 401)
         response.headers['Content-Type'] = 'aplication/json'
@@ -173,6 +177,7 @@ def gdisconnect():
 
 
 
+
 @app.errorhandler(404)
 def not_foud(e):
     return '404 NOT FOUND'
@@ -180,40 +185,40 @@ def not_foud(e):
 
 @app.route('/')
 def index():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+    for x in range(32))
+    login_session['state'] = state
+    
+    print(login_session)
     categories = session.query(Category).all()
-    item = session.query(Item).all()
-    for i in item:
-        print(i.category_id)
-
+    items = session.query(Item).all()
      
     
-    return render_template('index.html', item=item, categories=categories)
+    return render_template('index.html', items=items, categories=categories, STATE=state)
 
 @app.route('/catalog/<category>/items')
-def catalog_item(category):
+def catalog_items(category):
     categories = session.query(Category).all()
     category= session.query(Category).filter_by(name=category)
     for c in category:
         categoryName = c.name
-        item = session.query(Item).filter_by(category_id=c.id)
+        items = session.query(Item).filter_by(category_id=c.id).all()
         itemCount = session.query(Item).filter_by(category_id=c.id).count()
         if itemCount == 1:
-            itemCountString = 'Item'
+            itemCountString = 'Item' 
         elif itemCount > 1:
             itemCountString = 'Items'     
-
-    return render_template('index.html',categories=categories, category=category, item=item, itemCount = itemCount, itemCountString=itemCountString, categoryName=categoryName)   
+ 
+    return render_template('items.html',categories=categories, items=items, itemCountString=itemCountString, itemCount=itemCount, categoryName=categoryName)   
 
 @app.route('/catalog/<category>/<item>')
 def item_description(category, item):
     category = session.query(Category).filter_by(name=category)
-    item = session.query(Item).filter_by(name=item)
-    for i in item:
-        item_name = i.name
-        item_description = i.description
+    item = session.query(Item).filter_by(name=item).one()
+  
 
 
-    return(render_template('product.html', item_name=item_name, item_description=item_description))
+    return(render_template('item-description.html', item=item))
 
 #User Operations
 def createUser(login_session):
@@ -249,11 +254,45 @@ def add():
         newItem = Item(
             name=request.form['name'], 
             description = request.form['description'],
-            category_id = request.form['category'],
-            user_id=category.user_id
+            category_id = request.form['categories'],
         )
 
         session.add(newItem)
         session.commit
         return redirect(url_for('index'))
     return render_template('add.html', category=category)
+
+
+@app.route('/catalog/<category>/<item>/edit', methods=['GET', 'POST'])
+def edit(category, item):
+    '''   editedRestaurant = session.query(
+        Restaurant).filter_by(id=restaurant_id).one('''
+
+    category = session.query(Category).all()
+
+
+    item = session.query(Item).filter_by(name=item).one()
+   
+
+    if request.method == 'POST':
+        if request.form['name']:
+            item.name = request.form['name']
+        if request.form['description']:
+            item.description = request.form['description']   
+        if request.form['categories']:
+            item.category_id = request.form['categories']
+        
+        session.add(item)
+        session.commit()
+
+        return redirect(url_for('index'))
+    return render_template('edit.html', item=item, category=category)           
+
+@app.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
+def delete(category, item):
+
+    item = session.query(Item).filter_by(name=item).one()
+    category = session.query(Category).filter_by(name=category).one()
+
+
+    return render_template('delete.html', item=item)

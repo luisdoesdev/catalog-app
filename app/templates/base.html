@@ -3,7 +3,7 @@
         <title></title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
-      <link rel="stylesheet" href="../static/css/style.css">  
+      <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
     
          <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
@@ -16,8 +16,10 @@
 
     </head>
     <body>
-            <nav class="navbar navbar-light bg-light">
-                   <h3><a href="/">Catalog</a></h3>
+        {% if username in loging%} Yeya{%endif%}
+            <nav class="navbar ">
+                <div class="container container-nav">
+                   <h3><a class="brand-name"href="/">Catalog</a></h3>
 
                    <span id="signinButton" class="g-signin"
                    data-scope="openid email"
@@ -27,35 +29,39 @@
                    data-cookiepolicy="single_host_origin"
                    data-callback="signInCallback"
                    data-approvalprompt="force"> 
+                   <!-- Button to cover the google sign in -->
                             <button class="btn btn-default">
                                 Login
                             </button>
-                            </span>
-                    
+                    </span>
+                </div>
 
             </nav>
-            <div class="container">
+            <div class="container container-content">
 
-                     <!--- render content -->
-                     {% block content %}{% endblock %}
+                     <!--- render index -->
+                     {% block index %}{% endblock %}
                      
-                     <!--Render Products-->
-                     {% block iitemDescription %} {% endblock %}
+                     <!--Render itemDescription -->
+                     {% block itemDescription %} {% endblock %}
                      
                      <!-- Renders items -->
-            {% block items%}{%endblock%}
-            
-            <!-- Render edit  -->
-            {% block edit %} {% endblock %}
-            
-            <!---  Render add-->
-            {% block add%} {% endblock %}
+                    {% block items%}{%endblock%}
+                    
+                    <!-- Render edit  -->
+                    {% block edit %} {% endblock %}
+                    
+                    <!---  Render add-->
+                    {% block add%} {% endblock %}
+
+                      <!---  Render delete-->
+                      {% block delete%} {% endblock %}
             
             </div>
         </body>
-        <footer class="footer">
-            <div class="container">
-                <span class="text-muted">copyright Luis E Torruella</span>
+        <footer class="footer text-right ">
+            <div class="container-fluid">
+                <span class="text-muted pr-2">&copy<a style="color:#001F3F !important;" href="https://github.com/letorruella"> Luis E Torruella</a></span>
             </div>
           </footer>
 

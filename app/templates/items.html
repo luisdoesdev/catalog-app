@@ -1,19 +1,19 @@
 {% extends 'base.html'%}
 
 {% block items %}
-<div class="container">
 
-        <div class="category">
-            
+<div class="row">
+             <div class="category col-lg-2  col-md-4 col-sm-4">
+            <h2>Categories</h2>
             {% for c in categories %}
-                <h2><a href="{{url_for('catalog_items', category=c.name)}}">
+                <li><a href="{{url_for('catalog_items', category=c.name)}}">
                     {{c.name}}
-                </a></h2>
+                </a></li>
          
             {% endfor %}
         </div>
 
-        <div>
+        <div class="items col-md-6 col-sm-4">
             <h3>  {{categoryName}} ({{itemCount}} {{itemCountString}})</h3>
             <ul>
             {% for i in items %} 
@@ -24,6 +24,5 @@
             {% endfor %}
             </ul>
         </div>
-</div>        
-
+    </div>
 {% endblock %}

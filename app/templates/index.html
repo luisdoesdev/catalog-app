@@ -1,22 +1,24 @@
 {%  extends 'base.html'  %}
 
-    {% block content %}
-        <div class="container">
-
-            <div class="category">
+    {% block index %}
+       
+    <div class="row">
+            <div class="category col-lg-2  col-sm-4">
+                <h2>Categories</h2>
                 {% block login %}{% endblock %}
                 {% for c in categories %}
-                    <h2><a href="{{url_for('catalog_items', category=c.name)}}">{{c.name}}</a></h2>
+                    <li><a href="{{url_for('catalog_items', category=c.name)}}">{{c.name}}</></li>
              
                 {% endfor %}
             </div>
-            <div class="items">
-                <a href="/add">add new</a>
+            <div class="items col-sm-6">
                 <ul>    
-                    {% for i in items %}
+                        <a href="/add">add new</a>
+                        <h2>Latest Items</h2>
+                        {% for i in items %}
                     {% for c in categories %}   
                         {% if c.id == i.category_id %}
-                     <li><a href="{{url_for('item_description', category=c.name, item=i.name)}}">{{i.name}} </a> <span>{{c.name}}</span> </li>
+                     <li><a href="{{url_for('item_description', category=c.name, item=i.name)}}">{{i.name}} </a> <span style="font-style:italic;">({{c.name}})</span> </li>
                         
                         {%endif%}
                     {% endfor %}
@@ -24,7 +26,7 @@
                 </ul>    
             </div>
 
-        </div>    
+        </div>
 
     
     
