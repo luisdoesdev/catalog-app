@@ -37,10 +37,10 @@ def show_login():
   '''
 
 
-@app.route('/gconnect', methods=['GET','POST'])
+@app.route('/gconnect', methods=['POST'])
 def gconnect():
-   
     
+  
     if request.args.get('state')!= login_session['state']:
         response = make_response(json.dumps('Invalid State parameter id'), 401)
         response.headers['Content-Type'] = 'aplication/json'
@@ -119,8 +119,7 @@ def gconnect():
 
 
 
-
-@app.route('/gdisconnect')
+@app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
@@ -137,6 +136,7 @@ def gdisconnect():
     print 'result is '
     print result
     if result['status'] == '200':
+        print('yeah')
         del login_session['access_token']
         del login_session['gplus_id']
         del login_session['username']
@@ -144,7 +144,12 @@ def gdisconnect():
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
-    else:
+        
+    elif result['status'] == '400':
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -152,24 +157,7 @@ def gdisconnect():
 
 
 
-    # Get user info
-    userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt': 'json'}
-    answer = requests.get(userinfo_url, params=params)
-
-    data = answer.json()
-
-    login_session['username'] = data['name']
-    login_session['email'] = data['email']
-
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-    output += '!</h1>'
-    flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
-    return output
-
+ 
 
 
 
@@ -187,16 +175,21 @@ def not_foud(e):
 def index():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
     for x in range(32))
-      
-    login_session['username'] = "no"
-    if login_session['username']:
-        login_session['username'] = login_session['username']
     
+    print(login_session)
+
+    login_session['state']=state
+    if "username" in login_session:
+        username = True
+    else:
+        username = False    
+        
+
     categories = session.query(Category).all()
     items = session.query(Item).all()
      
     
-    return render_template('index.html', items=items, categories=categories, STATE=state, username=login_session['username'])
+    return render_template('index.html', items=items, categories=categories, STATE=state, username = username)
 
 @app.route('/catalog/<category>/items')
 def catalog_items(category):

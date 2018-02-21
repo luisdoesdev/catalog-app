@@ -19,7 +19,7 @@ html {
         list-style: none;
     }
 
-  h2 a{
+  h2 {
       color: #001F3F !important;
       font-weight: bold;  
     }
@@ -58,7 +58,10 @@ html {
         font-weight: 700;
     }
 
-    
+    button.#login-btn.btn-primary{
+        font-weight: bold;
+        background-color: #E64A19 !important;
+    }
    
     .brand-name{
         color: #fff !important;

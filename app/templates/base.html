@@ -17,30 +17,33 @@
     </head>
     <body>
         <nav class="navbar ">
-            <div class="container container-nav">
-                <h3><a class="brand-name"href="/">Catalog</a></h3>
+            <div  id="navbar"  class="container container-nav">
+                <h2><a class="brand-name"href="/">Catalog</a></h2>
+                {% if username %} 
                 
-                {% if username == no%}
-                <button  class="btn btn-default">
-                       <a style="color:#fff !important;"href="/gdisconnect"> Logout </a>
-                    </button>
-                {% else %}
-                   <span id="signinButton" class="g-signin"
-                   data-scope="openid email"
-                   data-clientid="682221223878-tlk5mp8m3uie8alomg5ukgaio03bd3fk.apps.googleusercontent.com"
-                   data-redirecturi="postmessage"
-                   data-accesstype="offline"
-                   data-cookiepolicy="single_host_origin"
-                   data-callback="signInCallback"
-                   data-approvalprompt="force"> 
-                   <!-- Button to cover the google sign in -->
-                            <button class="btn btn-default">
-                                Login
-                            </button>
-                    </span>
+                <a id="sign-out" onclick="signOut()">Sign out</a>
+               {%else %}
+
+                
+          
+                <button 
+                    id="sign-in"
+                    style="
+                    font-weight: bold;
+                    border-color: #E64A19 !important;
+                    background: #E64A19 !important;"
+                    type="button" 
+                    class="btn btn-primary" 
+                    data-toggle="modal" 
+                    data-target="#loginModal">
+                       Sign in
+                </button>
+                 
                 </div>
                 {%endif%}
 
+               
+                  
             </nav>
             <div class="container container-content">
 
@@ -62,6 +65,39 @@
                       <!---  Render delete-->
                       {% block delete%} {% endblock %}
             
+
+                   <!-- Modal -->
+                    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title text-center" id="exampleModalLabel">Login</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+
+                            <!--Google Sign In-->    
+                                <span id="signinButton" class="g-signin"
+                                    data-scope="openid email"
+                                    data-clientid="682221223878-tlk5mp8m3uie8alomg5ukgaio03bd3fk.apps.googleusercontent.com"
+                                    data-redirecturi="postmessage"
+                                    data-accesstype="offline"
+                                    data-cookiepolicy="single_host_origin"
+                                    data-callback="signInCallback"
+                                    data-approvalprompt="force"> 
+                                </span>
+
+                                
+
+                            </div>
+                        
+                        </div>
+                        </div>
+                    </div>
+  
+
             </div>
         </body>
         <footer class="footer text-right ">
@@ -70,41 +106,73 @@
             </div>
           </footer>
 
+          <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+         
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>   
+
     <script>
+    
 
-            function signInCallback(authResult){
-                // if the auth result is code that means it was succesful
-                if(authResult['code']){ 
-                    //Hide google sign in button
-                    $('#signinButton').attr('style', 'display:none')
-                    // Create an ajax method to pass the cliens one time code to the server
-                    $.ajax({
-                        type:'POST',
-                        // pass it into my server
-                        url:'/gconnect?state={{STATE}}',
-                        // Dont process the data into a string
-                        processData: false,
-                        contentType:"application/octect-stream; charset=utf-8",
-                        data: authResult['code'],
-                        success: function(result){
-                            if(result){
-                                $('#result').html('Login Succesful </br>' + result + '</br> Rederecting...')
-                                setTimeout(function(){
-                                    window.location.href='/'
-                                },4000);
-                            }else if (authResult['error']){
-                                console.log('there was an error ' + authResult['error'])
+
+function signInCallback(authResult) {
+  if (authResult['code']) {
+    // Hide the sign-in button now that the user is authorized
+    $('#signinButton').attr('style', 'display: none');
+    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+    $.ajax({
+      type: 'POST',
+      url: '/gconnect?state={{STATE}}',
+      processData: false,
+      data: authResult['code'],
+      contentType: 'application/octet-stream; charset=utf-8',
+      success: function(result) {
+           // Refresh Page
+         setTimeout(function() {
+              
+
+             window.location.href = "/";
+
+         }, 
+         2000);
+
+
+
+        // Handle or verify the server response if necessary.
+        if (result) {
+         
         
-                            }else {
-                                $('#result').html('Failed server call check the conf')
-                            }
-                        } 
-                    })
-                } 
-            }
-        
-        
-        </script>
+         // Error Handler
+      } else if (authResult['error']) {
+    console.log('There was an error: ' + authResult['error']);
+  } else {
+        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+       
+
+         }
+      }
+  }); } }
+
+
+  function signOut(){
+      
+      $.ajax({
+          type:"POST",
+          url:'gdisconnect',
+          success: function(){
+              //Refresh Page
+            window.location.href = "/";
+          },
+          error: function(){
+              alert("Error")
+          }
+      })
+  }
+ 
+    </script>
         
 
-</html>       
+</html>     
