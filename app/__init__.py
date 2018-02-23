@@ -1,4 +1,6 @@
-# app/__init__.py
+
+#!/usr/bin/env python
+
 
 
 from flask import Flask
