@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, url_for, session, request, flash, redirect
+from flask import render_template, url_for, session, request, flash, redirect, jsonify
 
 from flask import session as login_session
 import random, string
@@ -116,11 +116,33 @@ def gconnect():
     print "done!"
     return output
 
+# Check if user is currenty signed in
+def usernameState(state):
+    login_session['state']=state
+
+    if "username" in login_session:
+        username = True
+    else:
+        username = False  
+    
+    return username
+
+# creates anti forgery token state
+def currentState():
+
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+    for x in range(32))
+    
+    print(login_session)
+
+    
+    return state 
 
 
 
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
+ 
     access_token = login_session.get('access_token')
     if access_token is None:
         print 'Access Token is None'
@@ -171,28 +193,72 @@ def not_foud(e):
     return '404 NOT FOUND'
 
 
-@app.route('/')
-def index():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-    for x in range(32))
-    
-    print(login_session)
 
-    login_session['state']=state
-    if "username" in login_session:
-        username = True
-    else:
-        username = False    
+@app.route('/catalog.json/')
+def jsonCatalog():
+       #return jsonify(Menu_Item=Menu_Item.serialize)\
+    category = session.query(Category).all()   
+    items = session.query(Item).all()
+   
+    
+    return jsonify(items = [i.serialize for i in items])
+
         
+
+@app.route('/catalog/')
+def catalog():
+ 
+    state = currentState()
+    username = usernameState(state)
+  
+
 
     categories = session.query(Category).all()
     items = session.query(Item).all()
      
     
-    return render_template('index.html', items=items, categories=categories, STATE=state, username = username)
+    return render_template('index.html', items=items, categories=categories, STATE=state, username=username)
+
+
+@app.route('/intruder')
+def intruder():
+    
+    state = currentState()
+    username = usernameState(state)
+    
+    return render_template('g-login.html', STATE=state, username=username)
+    
+
+
+
+
+    
+
+@app.route('/')
+def index():
+    
+    state = currentState()
+    username = usernameState(state)
+  
+
+
+    categories = session.query(Category).all()
+    items = session.query(Item).all()
+     
+    
+    return render_template('index.html', items=items, categories=categories, STATE=state, username=username)
+
+
+
 
 @app.route('/catalog/<category>/items')
 def catalog_items(category):
+
+    state = currentState()
+    username = usernameState(state)
+  
+
+
     categories = session.query(Category).all()
     category= session.query(Category).filter_by(name=category)
     for c in category:
@@ -204,19 +270,26 @@ def catalog_items(category):
         elif itemCount > 1:
             itemCountString = 'Items'     
  
-    return render_template('items.html',categories=categories, items=items, itemCountString=itemCountString, itemCount=itemCount, categoryName=categoryName)   
+    return render_template('items.html',categories=categories, items=items, itemCountString=itemCountString, itemCount=itemCount, categoryName=categoryName, STATE=state, username=username)   
 
 @app.route('/catalog/<category>/<item>')
 def item_description(category, item):
-    category = session.query(Category).filter_by(name=category)
+    
+    state = currentState()
+    username = usernameState(state)
+  
+
+    category = session.query(Category).filter_by(name=category).one()
     item = session.query(Item).filter_by(name=item).one()
   
 
 
-    return(render_template('item-description.html', item=item))
+    return(render_template('item-description.html', item=item, STATE=state, username=username,category=category))
 
 #User Operations
 def createUser(login_session):
+    
+
     newUser = User(name=login_session['username'], email=login_session[
                    'email'])
     session.add(newUser)
@@ -244,6 +317,13 @@ def getUserID(email):
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
+    state = currentState()
+    username = usernameState(state)
+    state = currentState()
+    username = usernameState(state)
+    if username == False:
+        return redirect('/intruder')
+
     category = session.query(Category).all()
     if request.method == 'POST':
         newItem = Item(
@@ -255,17 +335,18 @@ def add():
         session.add(newItem)
         session.commit
         return redirect(url_for('index'))
-    return render_template('add.html', category=category)
+    return render_template('add.html', category=category, username=username, STATE=state)
 
 
 @app.route('/catalog/<category>/<item>/edit', methods=['GET', 'POST'])
 def edit(category, item):
-    '''   editedRestaurant = session.query(
-        Restaurant).filter_by(id=restaurant_id).one('''
+    
+    state = currentState()
+    username = usernameState(state)
+    if username == False:
+        return redirect('/intruder')
 
     category = session.query(Category).all()
-
-
     item = session.query(Item).filter_by(name=item).one()
    
 
@@ -281,13 +362,31 @@ def edit(category, item):
         session.commit()
 
         return redirect(url_for('index'))
-    return render_template('edit.html', item=item, category=category)           
+    return render_template('edit.html', item=item, category=category, username=username,STATE=state)           
 
 @app.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
 def delete(category, item):
+    state = currentState()
+    username = usernameState(state)
+    if username == False:
+        return redirect('/intruder')
 
     item = session.query(Item).filter_by(name=item).one()
     category = session.query(Category).filter_by(name=category).one()
 
+    if request.method == 'POST':
+        session.delete(item)
+        session.commit()
+        return redirect('/')
 
-    return render_template('delete.html', item=item)
+
+    ''' if request.method == 'POST':
+        session.delete(restaurantToDelete)
+        flash('%s Successfully Deleted' % restaurantToDelete.name)
+        session.commit()
+        return redirect(url_for('showRestaurants', restaurant_id=restaurant_id))
+    else:
+        return render_template('deleteRestaurant.html', restaurant=restaurantToDelete)
+    '''    
+
+    return render_template('delete.html', item=item, category=category, STATE=state, username=username)

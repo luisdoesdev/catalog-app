@@ -35,8 +35,24 @@ class Category(Base):
     @property
     def serialize(self):
         return{
-            'name':self.name
+            'name':self.name,
+            'id': self.id
         }
+
+    '''@property 
+    def serialize(self):
+        #Return OBJ Data
+        return{
+            'name': self.name,
+            'decription' : self.description,
+            'id' : self.id,
+            'category': self.category
+
+        }
+    
+'''
+
+ 
 
   
 
@@ -62,10 +78,9 @@ class Item(Base):
         return{
             'name': self.name,
             'decription' : self.description,
-            'id' : self.id,
-            'price' : self.price,
-            'course': self.course
-    
+            'id' : self.id
+       
+
         }
     
 

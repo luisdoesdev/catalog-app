@@ -14,11 +14,13 @@
             <div class="items col-sm-6">
                 
                 <ul>    
+                        {% if username %}
+                        <h5><a href="/add">add new</a></h5>
+                        {%endif%}
+    
                     <h2 style="color: #001F3F !important;
                     font-weight: bold; ">Latest Items</h2>
-                    <h5><a href="/add">add new</a></h5>
-                    
-
+                 
                         {% for i in items %}
                     {% for c in categories %}   
                         {% if c.id == i.category_id %}

@@ -4,7 +4,7 @@
         
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
       <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
-    
+      <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
          <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
    </script>
@@ -21,7 +21,10 @@
                 <h2><a class="brand-name"href="/">Catalog</a></h2>
                 {% if username %} 
                 
-                <a id="sign-out" onclick="signOut()">Sign out</a>
+                <a 
+                style="cursor:pointer"
+                id="sign-out" 
+                 onclick="signOut()">Sign out</a>
                {%else %}
 
                 
@@ -134,7 +137,7 @@ function signInCallback(authResult) {
          setTimeout(function() {
               
 
-             window.location.href = "/";
+             window.location.reload();
 
          }, 
          2000);
@@ -161,10 +164,10 @@ function signInCallback(authResult) {
       
       $.ajax({
           type:"POST",
-          url:'gdisconnect',
+          url:'/gdisconnect',
           success: function(){
               //Refresh Page
-            window.location.href = "/";
+            window.location.reload()
           },
           error: function(){
               alert("Error")
