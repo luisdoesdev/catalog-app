@@ -2,4 +2,4 @@
 *.vagrant/
 *.db
 client_secrets.json
-
+*.db-journal
