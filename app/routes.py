@@ -15,7 +15,7 @@ import requests
 # Load Clients Secrets Id
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 
-
+#Impor Models and SQLAlchemy library
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, User, Category, Item
@@ -26,17 +26,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-'''
-Make Login FLOW
-Fix The Layout
-ADD CRUD
-ADD JSON
-
-@app.route('/login')
-def show_login():
-  '''
-
-
+# Google Oath2 methods and routes
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     
@@ -46,6 +36,7 @@ def gconnect():
         response.headers['Content-Type'] = 'aplication/json'
         return response
     code = request.data
+    
     try:
     # Updgrade the  auth code to a creddential object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
@@ -109,12 +100,53 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['email'] = data['email']
 
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-    output += '!</h1>'
+   
+    output = login_session['username']
+   
     print "done!"
     return output
+
+
+@app.route('/gdisconnect', methods=['POST'])
+def gdisconnect():
+ 
+    access_token = login_session.get('access_token')
+    if access_token is None:
+        print 'Access Token is None'
+        response = make_response(json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    print 'In gdisconnect access token is %s', access_token
+    print 'User name is: '
+    print login_session['username']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    print 'result is '
+    print result
+
+    # If th status is 200 logout the user no problem
+    if result['status'] == '200':
+        print('yeah')
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # If the status is 400 logout the user regardless but printout the proble to be solve later withou ruining the users experience     
+    elif result['status'] == '400':
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
 
 # Check if user is currenty signed in
 def usernameState(state):
@@ -139,61 +171,13 @@ def currentState():
     return state 
 
 
-
-@app.route('/gdisconnect', methods=['POST'])
-def gdisconnect():
- 
-    access_token = login_session.get('access_token')
-    if access_token is None:
-        print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-    print 'result is '
-    print result
-    if result['status'] == '200':
-        print('yeah')
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-        
-    elif result['status'] == '400':
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-
-
-
- 
-
-
-
-
-
-
-
-
+# App Errro Handler
 @app.errorhandler(404)
 def not_foud(e):
     return '404 NOT FOUND'
 
 
-
+# JSON API Route
 @app.route('/catalog.json/')
 def jsonCatalog():
        #return jsonify(Menu_Item=Menu_Item.serialize)\
@@ -203,7 +187,21 @@ def jsonCatalog():
     
     return jsonify(items = [i.serialize for i in items])
 
-        
+
+
+# Route when an unathorize user tries to access CRUD operations
+@app.route('/intruder')
+def intruder():
+    
+    state = currentState()
+    username = usernameState(state)
+    
+    return render_template('g-login.html', STATE=state, username=username)
+    
+
+ 
+
+# Catalog and / are home routes of the application
 
 @app.route('/catalog/')
 def catalog():
@@ -218,21 +216,6 @@ def catalog():
      
     
     return render_template('index.html', items=items, categories=categories, STATE=state, username=username)
-
-
-@app.route('/intruder')
-def intruder():
-    
-    state = currentState()
-    username = usernameState(state)
-    
-    return render_template('g-login.html', STATE=state, username=username)
-    
-
-
-
-
-    
 
 @app.route('/')
 def index():
@@ -249,8 +232,7 @@ def index():
     return render_template('index.html', items=items, categories=categories, STATE=state, username=username)
 
 
-
-
+# Detail Routes
 @app.route('/catalog/<category>/items')
 def catalog_items(category):
 
@@ -286,6 +268,8 @@ def item_description(category, item):
 
     return(render_template('item-description.html', item=item, STATE=state, username=username,category=category))
 
+
+
 #User Operations
 def createUser(login_session):
     
@@ -313,6 +297,8 @@ def getUserID(email):
 
 
 
+
+
 # CRUD Operations
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -324,6 +310,7 @@ def add():
     if username == False:
         return redirect('/intruder')
 
+    
     category = session.query(Category).all()
     if request.method == 'POST':
         newItem = Item(
