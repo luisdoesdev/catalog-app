@@ -43,7 +43,7 @@ The app is organize in very easy to nagivate folders, I looked at how other prof
     * run.py this is basic script that allows you to start the app just type 'python run.py' in the terminal and voila
     * This README.md file that is basically explaining what is happening
     * requirements.txt that has all the libraries that are used to composed the entire aplication
-    * the Vagrantfile, this project was built using Vagrant as virtual enviroments to sepparte the libraries from my local pc see vagrant.com for more information on it, the configuration for this enviroment was provided by Udacity
+    * the Vagrantfile, this project was built using Vagrant as virtual enviroments to sepparte the libraries from my local pc see https://www.vagrantup.com/ for more information on it, the configuration for this enviroment was provided by Udacity
 
 * App folder '/app'
     * static holds the css folders where all the styles are located, nothing special here, oh and a cheese logo I made for favicon placeholder
