@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-import sys
-
 from app import app
-from flask import render_template, url_for, session, request, flash, redirect, jsonify
+from flask import render_template, url_for, session, \
+request, flash, redirect, jsonify
 
 from flask import session as login_session
 import random
@@ -29,6 +28,31 @@ engine = create_engine('sqlite:///models.db')
 Base.metadata.bind = engine
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+'''
+* Pep8(Module Problems Solution Pending...)
+* ADD USERS TO DATABASE
+* an endpoint that serves an arbitrary item in the catalog.
+* Refers to the createUser method
+* Get Rid of Code Repition using decorators
+* Make sure the actual user can Perform the actions
+* Checks one_or_none function
+'''
+
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid State parameter id'), 401)
+        response.headers['Content-Type'] = 'aplication/json'
+        print response
+        return redirect('/') 
+    code = request.data
+    data_r = request.form['user']
+
+    print data_r
+    return redirect('/')
 
 
 # Google Oath2 methods and routes
@@ -106,6 +130,8 @@ def gconnect():
     login_session['email'] = data['email']
 
     output = login_session['username']
+    createUser()
+    
 
     print "done!"
     return output
@@ -124,7 +150,8 @@ def gdisconnect():
     print 'In gdisconnect access token is %s', access_token
     print 'User name is: '
     print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' \
+    % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -189,7 +216,7 @@ def not_foud(e):
 # JSON API Route
 @app.route('/catalog.json/')
 def jsonCatalog():
-       # return jsonify(Menu_Item=Menu_Item.serialize)\
+
     category = session.query(Category).all()
     items = session.query(Item).all()
 
@@ -277,10 +304,11 @@ def item_description(category, item):
     state = currentState()
     username = usernameState(state)
 
-    category = session.query(Category).filter_by(name=category).one()
-    item = session.query(Item).filter_by(name=item).one()
+    category = session.query(Category).filter_by(name=category).one_or_none()
+    item = session.query(Item).filter_by(name=item).one_or_none()
 
-    return(render_template('item-description.html', item=item, STATE=state, username=username, category=category))
+    return(render_template('item-description.html',
+           item=item, STATE=state, username=username, category=category))
 
 
 # User Operations
@@ -290,18 +318,19 @@ def createUser(login_session):
                    'email'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = session.query(User).filter_by(
+        email=login_session['email']).one_or_none()
     return user.id
 
 
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
+    user = session.query(User).filter_by(id=user_id).one_or_none()
     return user
 
 
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = session.query(User).filter_by(email=email).one_or_none()
         return user.id
     except BaseException:
         return None
@@ -345,7 +374,7 @@ def edit(category, item):
         return redirect('/intruder')
 
     category = session.query(Category).all()
-    item = session.query(Item).filter_by(name=item).one()
+    item = session.query(Item).filter_by(name=item).one_or_none()
 
     if request.method == 'POST':
         if request.form['name']:
@@ -374,8 +403,8 @@ def delete(category, item):
     if not username:
         return redirect('/intruder')
 
-    item = session.query(Item).filter_by(name=item).one()
-    category = session.query(Category).filter_by(name=category).one()
+    item = session.query(Item).filter_by(name=item).one_or_none()
+    category = session.query(Category).filter_by(name=category).one_or_none()
 
     if request.method == 'POST':
         session.delete(item)

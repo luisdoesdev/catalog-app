@@ -46,7 +46,7 @@ The app is organize in very easy to nagivate folders, I looked at how other prof
     * the Vagrantfile, this project was built using Vagrant as virtual enviroments to sepparte the libraries from my local pc see https://www.vagrantup.com/ for more information on it, the configuration for this enviroment was provided by Udacity
 
 * App folder '/app'
-    * static holds the css folders where all the styles are located, nothing special here, oh and a cheese logo I made for favicon placeholder
+    * static holds the css folders where all the styles are located, nothing special here, oh and a cheesy logo I made for favicon placeholder
     * templates holds all the .html documents 
     *  -___init__-.py' to make sure all folders are treated as packages
     * models.py creates the database and its relationships
