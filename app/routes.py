@@ -49,7 +49,7 @@ def login():
         print response
         return redirect('/') 
     code = request.data
-    data_r = request.form['user']
+    data_r = request.form['username']
 
     print data_r
     return redirect('/')
