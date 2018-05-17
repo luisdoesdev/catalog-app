@@ -7,6 +7,12 @@ from flask import session as login_session
 import random
 import string
 
+from google.oauth2 import id_token
+from google.auth.transport import requests
+# I dont want to confused the  two request modules I have imported
+requestGoogleAuth = requests.Request()
+
+
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -15,16 +21,13 @@ import json
 from flask import make_response
 import requests
 
-# Load Clients Secrets Id
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())[
-    'web']['client_id']
 
 # Impor Models and SQLAlchemy library
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, User, Category, Item
 
-engine = create_engine('sqlite:///models.db')
+engine = create_engine('sqlite:///models.db?check_same_thread=False')
 Base.metadata.bind = engine
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -59,6 +62,50 @@ def login():
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
 
+    if request.args.get('state') != login_session['state']:
+        return 'Error state doesnt match STATE'
+
+    token =  request.data
+    # (Receive token by HTTPS POST)
+    # ...
+
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        idinfo = id_token.verify_oauth2_token(token, requestGoogleAuth, "682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com")
+
+        data = idinfo
+
+        login_session['username'] = data['name']
+        login_session['email'] = data['email']
+        
+        print session.query(User).all()
+
+
+        print data
+        
+        return "Success"
+
+        # Or, if multiple clients access the backend server:
+        # idinfo = id_token.verify_oauth2_token(token, requests.Request())
+        # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
+        #     raise ValueError('Could not verify audience.')
+
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise ValueError('Wrong issuer.')
+
+        # If auth request is from a G Suite domain:
+        # if idinfo['hd'] != GSUITE_DOMAIN_NAME:
+        #     raise ValueError('Wrong hosted domain.')
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+        userid = idinfo['sub']
+    except ValueError:
+        # Invalid token
+        pass
+    
+ 
+
+    '''
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid State parameter id'), 401)
         response.headers['Content-Type'] = 'aplication/json'
@@ -135,11 +182,17 @@ def gconnect():
 
     print "done!"
     return output
-
+    '''
 
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
+   
+    del login_session['username']
+    del login_session['email']
+    
+    return "Success"
 
+    '''
     access_token = login_session.get('access_token')
     if access_token is None:
         print 'Access Token is None'
@@ -168,9 +221,9 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    # If the status is 400 logout the user regardless but printout the proble
+    # If the status is 400 logout the user regardless but printout the problem
     # to be solve later withou ruining the users experience
-    elif result['status'] == '400':
+    elif result['status'] == '401':
         del login_session['access_token']
         del login_session['gplus_id']
         del login_session['username']
@@ -181,7 +234,7 @@ def gdisconnect():
                 400))
         response.headers['Content-Type'] = 'application/json'
         return response
-
+    '''
 
 # Check if user is currenty signed in
 def usernameState(state):
@@ -312,16 +365,31 @@ def item_description(category, item):
 
 
 # User Operations
+    '''   
 def createUser(login_session):
 
+    # session.query(User).delete()
+    exists = session.query(User).filter_by(
+        email=login_session['email']).scalar() is not None
+    if exists:
+        return session.query(User).filter_by(email = login_session['email'])
+    print session.query(User).all()
+    print login_session
+    
+    sessionQuery =  session.query(User).delete()
+   
+    print user.email    
+    if user.email == loggin_session["email"]:
+        print "yes"
+
+
+    print login_session
     newUser = User(name=login_session['username'], email=login_session[
                    'email'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(
-        email=login_session['email']).one_or_none()
     return user.id
-
+    '''
 
 def getUserInfo(user_id):
     user = session.query(User).filter_by(id=user_id).one_or_none()

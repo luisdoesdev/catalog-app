@@ -1,15 +1,15 @@
 <html>
     <head>
         <title></title>
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+    <meta name="google-signin-client_id" content="682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com">    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
       <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
       <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
          <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
    </script>
  
- <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+ <script src="https://apis.google.com/js/platform.js" async defer></script>
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
  <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 
@@ -105,15 +105,8 @@
                                 <!--Google Sign In-->    
                                 <h5> Or use your google account to login</h5>
 
-                                        <span id="signinButton" class="g-signin"
-                                            data-scope="openid email"
-                                            data-clientid="CLIENT_ID"
-                                            data-redirecturi="postmessage"
-                                            data-accesstype="offline"
-                                            data-cookiepolicy="single_host_origin"
-                                            data-callback="signInCallback"
-                                            data-approvalprompt="force"> 
-                                        </span>
+                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                <a href="#" onclick="signOut();">Sign out</a>
 
 
                             </div>
@@ -140,9 +133,46 @@
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>   
 
     <script>
-    
+  function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  var id_token = googleUser.getAuthResponse().id_token;
+        $.ajax({
+            type: 'POST',
+            url: '/gconnect?state={{STATE}}',
+            processData: false,
+            data: id_token,
+            contentType: 'application/octet-stream; charset=utf-8',
+            success: function(result) {
+                console.log(result)
+            }
+        
+        })
 
 
+        }
+
+
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+
+          $.ajax({
+          type:"POST",
+          url:'/gdisconnect',
+          success: function(){
+              //Refresh Page
+            window.location.reload()
+          },
+          error: function(){
+              alert("Error")
+          }
+      })
+  }
+
+/*
 function signInCallback(authResult) {
   if (authResult['code']) {
     // Hide the sign-in button now that the user is authorized
@@ -196,7 +226,7 @@ function signInCallback(authResult) {
           }
       })
   }
-
+*/
 
   
  
