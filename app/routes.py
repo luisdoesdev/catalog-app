@@ -74,14 +74,16 @@ def gconnect():
         idinfo = id_token.verify_oauth2_token(token, requestGoogleAuth, "682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com")
 
         data = idinfo
+        print idinfo
 
         login_session['username'] = data['name']
         login_session['email'] = data['email']
+      
+
         
-        print session.query(User).all()
+        
+        createUser(login_session['username'], login_session['email'])
 
-
-        print data
         
         return "Success"
 
@@ -365,10 +367,34 @@ def item_description(category, item):
 
 
 # User Operations
-    '''   
-def createUser(login_session):
+def createUser(name, email):
 
-    # session.query(User).delete()
+
+    #print user
+    
+    u = session.query(User).filter_by(email = email).one_or_none()
+    if u == None:
+        # Create ID
+        id = random.randint(0,9)
+        newUser = User(id = id, name=name, email=email)
+        session.add(newUser)
+        try:
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
+        newUser = session.query(User).all()    
+
+        print newUser.email + newUser.name + "   " + newQuery
+        
+
+    else:
+        print u.email + str(u.id)
+
+    '''   
     exists = session.query(User).filter_by(
         email=login_session['email']).scalar() is not None
     if exists:
