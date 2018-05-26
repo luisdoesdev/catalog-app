@@ -2,6 +2,7 @@
 from app import app
 from flask import render_template, url_for, session, \
 request, flash, redirect, jsonify
+from functools import wraps
 
 from flask import session as login_session
 import random
@@ -40,7 +41,7 @@ session = Session()
 * Refers to the createUser method
 * Get Rid of Code Repition using decorators
 * Make sure the actual user can Perform the actions
-* Checks one_or_none function
+
 '''
 
 
@@ -367,6 +368,17 @@ def item_description(category, item):
 
 
 # User Operations
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+           
+            return redirect('/intruder')
+    return decorated_function
+
+
 def createUser(name, email):
 
 
@@ -388,7 +400,7 @@ def createUser(name, email):
 
         newUser = session.query(User).all()    
 
-        print newUser.email + newUser.name + "   " + newQuery
+        print newUser.email + newUser.name 
         
 
     else:
@@ -431,7 +443,7 @@ def getUserID(email):
 
 
 # CRUD Operations
-
+@login_required
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     state = currentState()
@@ -458,14 +470,13 @@ def add():
         username=username,
         STATE=state)
 
-
+@login_required
 @app.route('/catalog/<category>/<item>/edit', methods=['GET', 'POST'])
 def edit(category, item):
 
     state = currentState()
     username = usernameState(state)
-    if not username:
-        return redirect('/intruder')
+  
 
     category = session.query(Category).all()
     item = session.query(Item).filter_by(name=item).one_or_none()
@@ -489,7 +500,7 @@ def edit(category, item):
         username=username,
         STATE=state)
 
-
+@login_required
 @app.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
 def delete(category, item):
     state = currentState()

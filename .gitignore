@@ -3,3 +3,4 @@
 *.db
 client_secrets.json
 *.db-journal
+/venv
