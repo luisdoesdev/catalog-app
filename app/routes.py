@@ -455,7 +455,8 @@ def add():
     username = usernameState(state)
     state = currentState()
     username = usernameState(state)
-
+    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
+    
 
     category = session.query(Category).all()
     if request.method == 'POST':
@@ -463,6 +464,7 @@ def add():
             name=request.form['name'],
             description=request.form['description'],
             category_id=request.form['categories'],
+            user_id = user.id
         )
 
         session.add(newItem)
@@ -480,10 +482,21 @@ def edit(category, item):
 
     state = currentState()
     username = usernameState(state)
-  
+    
+    
 
     category = session.query(Category).all()
     item = session.query(Item).filter_by(name=item).one_or_none()
+    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
+
+    print "ids are: " +  str(user.id) + str(item.id)
+
+    ids =  user.id == item.user_id
+   
+    if not ids:
+        return redirect(url_for('index'))    
+
+    print "Items is: " +  str(item.user_id)
 
     if request.method == 'POST':
         if request.form['name']:
