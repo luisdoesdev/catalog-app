@@ -35,6 +35,10 @@ session = Session()
 
 
 '''
+* Fix Intruder Method
+* Determine User and tracking
+* Auto Sign Out After Certain Time
+* App Deletes items
 * Pep8(Module Problems Solution Pending...)
 * ADD USERS TO DATABASE
 * an endpoint that serves an arbitrary item in the catalog.
@@ -450,8 +454,7 @@ def add():
     username = usernameState(state)
     state = currentState()
     username = usernameState(state)
-    if not username:
-        return redirect('/intruder')
+
 
     category = session.query(Category).all()
     if request.method == 'POST':
@@ -462,7 +465,7 @@ def add():
         )
 
         session.add(newItem)
-        session.commit
+        session.commit()
         return redirect(url_for('index'))
     return render_template(
         'add.html',
@@ -505,8 +508,7 @@ def edit(category, item):
 def delete(category, item):
     state = currentState()
     username = usernameState(state)
-    if not username:
-        return redirect('/intruder')
+    
 
     item = session.query(Item).filter_by(name=item).one_or_none()
     category = session.query(Category).filter_by(name=category).one_or_none()
