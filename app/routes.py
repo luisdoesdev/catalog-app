@@ -35,7 +35,7 @@ session = Session()
 
 
 '''
-* Fix Intruder Method
+
 * Determine User and tracking
 * Auto Sign Out After Certain Time
 * App Deletes items
@@ -270,7 +270,8 @@ def currentState():
 # App Errro Handler
 @app.errorhandler(404)
 def not_foud(e):
-    return '404 NOT FOUND'
+    return ' hahahah The classic<b> 404 NOT FOUND </b> click <a href="/" ' + \
+   ' style="border-color:#000;"> here </a> to go home'
 
 
 # JSON API Route
@@ -447,8 +448,8 @@ def getUserID(email):
 
 
 # CRUD Operations
-@login_required
 @app.route('/add', methods=['GET', 'POST'])
+@login_required
 def add():
     state = currentState()
     username = usernameState(state)
@@ -473,8 +474,8 @@ def add():
         username=username,
         STATE=state)
 
-@login_required
 @app.route('/catalog/<category>/<item>/edit', methods=['GET', 'POST'])
+@login_required
 def edit(category, item):
 
     state = currentState()
@@ -503,8 +504,8 @@ def edit(category, item):
         username=username,
         STATE=state)
 
-@login_required
 @app.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
+@login_required
 def delete(category, item):
     state = currentState()
     username = usernameState(state)
