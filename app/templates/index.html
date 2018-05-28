@@ -24,7 +24,12 @@
                         {% for i in items %}
                     {% for c in categories %}   
                         {% if c.id == i.category_id %}
-                     <li><a href="{{url_for('item_description', category=c.name, item=i.name)}}">{{i.name}} </a> <span style="font-style:italic;">({{c.name}})</span> </li>
+                     <li><a href="{{url_for('item_description', category=c.name, item=i.name)}}">{{i.name}} 
+
+                     </a> <span style="font-style:italic;">({{c.name}})
+                         
+                        {%if id%} You made this {%endif%}
+                    </span> </li>
                         
                         {%endif%}
                     {% endfor %}

@@ -54,12 +54,12 @@ def login():
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid State parameter id'), 401)
         response.headers['Content-Type'] = 'aplication/json'
-        print response
+       
         return redirect('/') 
     code = request.data
     data_r = request.form['username']
 
-    print data_r
+   
     return redirect('/')
 
 
@@ -79,7 +79,7 @@ def gconnect():
         idinfo = id_token.verify_oauth2_token(token, requestGoogleAuth, "682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com")
 
         data = idinfo
-        print idinfo
+        
 
         login_session['username'] = data['name']
         login_session['email'] = data['email']
@@ -262,7 +262,7 @@ def currentState():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in range(32))
 
-    print(login_session)
+    
 
     return state
 
@@ -319,8 +319,10 @@ def index():
     state = currentState()
     username = usernameState(state)
 
+
     categories = session.query(Category).all()
     items = session.query(Item).all()
+
 
     return render_template(
         'index.html',
@@ -367,12 +369,21 @@ def item_description(category, item):
 
     category = session.query(Category).filter_by(name=category).one_or_none()
     item = session.query(Item).filter_by(name=item).one_or_none()
+    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
+
+  
+    ids =  user.id == item.user_id
+   
+    
+      
 
     return(render_template('item-description.html',
-           item=item, STATE=state, username=username, category=category))
+           item=item, STATE=state, username=username, category=category, id=ids))
 
 
 # User Operations
+
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -487,16 +498,9 @@ def edit(category, item):
 
     category = session.query(Category).all()
     item = session.query(Item).filter_by(name=item).one_or_none()
-    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
-
-    print "ids are: " +  str(user.id) + str(item.id)
-
-    ids =  user.id == item.user_id
    
-    if not ids:
-        return redirect(url_for('index'))    
 
-    print "Items is: " +  str(item.user_id)
+   
 
     if request.method == 'POST':
         if request.form['name']:
