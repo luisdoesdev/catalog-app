@@ -82,6 +82,7 @@ def gconnect():
         
 
         login_session['username'] = data['name']
+        
         login_session['email'] = data['email']
       
 
@@ -284,6 +285,16 @@ def jsonCatalog():
     return jsonify(items=[i.serialize for i in items])
 
 
+@app.route('/catalog/<category>/<item>.json')
+def jsonItem(category, item):
+    
+    category = session.query(Category).filter_by(name=category).one_or_none()
+    item = session.query(Item).filter_by(name=item).one_or_none()
+
+    return jsonify(item = [item.serialize])
+    
+
+
 # Route when an unathorize user tries to access CRUD operations
 @app.route('/intruder')
 def intruder():
@@ -367,13 +378,21 @@ def item_description(category, item):
     state = currentState()
     username = usernameState(state)
 
+    
+
     category = session.query(Category).filter_by(name=category).one_or_none()
     item = session.query(Item).filter_by(name=item).one_or_none()
-    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
+    if username:
+        print "yes"
+        user = session.query(User).filter_by(email=login_session['email']).one_or_none()
+        ids =  user.id == item.user_id
+        return(render_template('item-description.html',
+           item=item, STATE=state, username=username, category=category, id=ids))
+
+        
 
   
-    ids =  user.id == item.user_id
-   
+    ids = "hello"
     
       
 

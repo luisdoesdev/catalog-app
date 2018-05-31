@@ -144,6 +144,13 @@
             data: id_token,
             contentType: 'application/octet-stream; charset=utf-8',
             success: function(result) {
+                        //Refresh Page
+             setTimeout(function() {
+
+              window.location.reload();
+         }, 
+         2000);
+                
                 console.log(result)
             }
         
@@ -165,7 +172,11 @@ function signOut() {
           url:'/gdisconnect',
           success: function(){
               //Refresh Page
-            window.location.reload()
+             setTimeout(function() {
+
+              window.location.reload();
+         }, 
+         2000);
           },
           error: function(){
               alert("Error")
