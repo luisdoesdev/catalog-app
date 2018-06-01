@@ -27,9 +27,10 @@
                  onclick="signOut()">Sign out</a>
                {%else %}
 
-                
-          
+               <form action="/login">
+             
                 <button 
+                    type="submit"
                     id="sign-in"
                     style="
                     font-weight: bold;
@@ -37,11 +38,12 @@
                     background: #E64A19 !important;"
                     type="button" 
                     class="btn btn-primary" 
-                    data-toggle="modal" 
-                    data-target="#loginModal">
-                       Sign in
+                          >
+                                    Sign in
                 </button>
                  
+                </form>
+          
                 
 
 
@@ -74,47 +76,6 @@
                       {% block delete%} {% endblock %}
             
 
-                   <!-- Modal -->
-                    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                            <h5 class="modal-title text-center" id="exampleModalLabel">Login</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            </div>
-                            <div class="modal-body">
-
-                         
-                                <!--FORM
-                                    <form action="{{ url_for('login')}}" method='post' >
-                                        <div class="form-group">
-                                            <label for="username">Username</label>
-                                            <input name='username'  class="form-control" id="username"  placeholder="Username">
-                                            
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="userPassword">Password</label>
-                                            <input name='password' type="password" class="form-control" id="userPassword" placeholder="Password">
-                                        </div>
-                                        
-                                        <button type='submit' value="Submit" class="btn btn-md btn-primary">Login</button>
-                                    </form>
-                                -->
-                                
-                                <!--Google Sign In-->    
-                                <h5> Or use your google account to login</h5>
-
-                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                                <a href="#" onclick="signOut();">Sign out</a>
-
-
-                            </div>
-                        
-                        </div>
-                        </div>
-                    </div>
   
 
             </div>
@@ -134,33 +95,7 @@
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>   
 
     <script>
-  function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  var id_token = googleUser.getAuthResponse().id_token;
-        $.ajax({
-            type: 'POST',
-            url: '/gconnect?state={{STATE}}',
-            processData: false,
-            data: id_token,
-            contentType: 'application/octet-stream; charset=utf-8',
-            success: function(result) {
-                        //Refresh Page
-             setTimeout(function() {
-
-              window.location.reload();
-         }, 
-         2000);
-                
-                console.log(result)
-            }
-        
-        })
-
-
-        }
-
-
-
+ 
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
@@ -183,62 +118,6 @@ function signOut() {
           }
       })
   }
-
-/*
-function signInCallback(authResult) {
-  if (authResult['code']) {
-    // Hide the sign-in button now that the user is authorized
-    $('#signinButton').attr('style', 'display: none');
-    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
-    $.ajax({
-      type: 'POST',
-      url: '/gconnect?state={{STATE}}',
-      processData: false,
-      data: authResult['code'],
-      contentType: 'application/octet-stream; charset=utf-8',
-      success: function(result) {
-           // Refresh Page
-         setTimeout(function() {
-              
-
-             window.location.reload();
-
-         }, 
-         2000);
-
-
-
-        // Handle or verify the server response if necessary.
-        if (result) {
-         
-        
-         // Error Handler
-      } else if (authResult['error']) {
-    console.log('There was an error: ' + authResult['error']);
-  } else {
-        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-       
-
-         }
-      }
-  }); } }
-
-
-  function signOut(){
-      
-      $.ajax({
-          type:"POST",
-          url:'/gdisconnect',
-          success: function(){
-              //Refresh Page
-            window.location.reload()
-          },
-          error: function(){
-              alert("Error")
-          }
-      })
-  }
-*/
 
   
  

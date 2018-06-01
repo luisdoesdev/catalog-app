@@ -1,13 +1,12 @@
 
 <head>
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com">
 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
         <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
       
-           <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
-     </script>
-   
+  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
    <script src="//apis.google.com/js/platform.js?onload=start"> </script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
@@ -25,20 +24,13 @@
               <div class="card-header">
                Login
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">OH OH!! Im afraid to get into this page you need to login heheh</h5>
+                <h5 class="card-title">WELCOME, please login</h5>
+                <div class="card-body mx-auto">
                     
 
                     <!--Google Sign In-->    
-                    <span id="signinButton" class="g-signin"
-                    data-scope="openid email"
-                    data-clientid="CLIENT_ID"
-                    data-redirecturi="postmessage"
-                    data-accesstype="offline"
-                    data-cookiepolicy="single_host_origin"
-                    data-callback="signInCallback"
-                    data-approvalprompt="force"> 
-                    </span>
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
                                         
                 </div>
                 <a href="/"> Return home</a>
@@ -47,46 +39,41 @@
         </div>
 
 </body>
-
-
-<script>
-function signInCallback(authResult) {
-  if (authResult['code']) {
-    // Hide the sign-in button now that the user is authorized
-    $('#signinButton').attr('style', 'display: none');
-    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
-    $.ajax({
-      type: 'POST',
-      url: '/gconnect?state={{STATE}}',
-      processData: false,
-      data: authResult['code'],
-      contentType: 'application/octet-stream; charset=utf-8',
-      success: function(result) {
-           // Refresh Page
-         setTimeout(function() {
-              
-
-             window.location.href="/";
-
-         }, 
-         2000);
-
-
-
-        // Handle or verify the server response if necessary.
-        if (result) {
-         
-        
-         // Error Handler
-      } else if (authResult['error']) {
-    console.log('There was an error: ' + authResult['error']);
-  } else {
-        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous">
+</script>
        
 
-         }
-      }
-  }); } }
+<script>
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  var id_token = googleUser.getAuthResponse().id_token;
+        $.ajax({
+            type: 'POST',
+            url: '/gconnect?state={{STATE}}',
+            processData: false,
+            data: id_token,
+            contentType: 'application/octet-stream; charset=utf-8',
+            success: function(result) {
+                        //Refresh Page
+             setTimeout(function() {
+
+              window.location.href="/"
+         }, 
+         2000);
+                
+                console.log(result)
+            }
+        
+        })
+
+
+        }
+
+
+
 
 
 </script>

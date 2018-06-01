@@ -34,6 +34,12 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
+# anti forgery 
+state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in range(32))
+
+
+
 '''
 
 * Determine User and tracking
@@ -49,31 +55,27 @@ session = Session()
 '''
 
 
-@app.route('/login', methods=['GET','POST'])
-def login():
-    if request.args.get('state') != login_session['state']:
-        response = make_response(json.dumps('Invalid State parameter id'), 401)
-        response.headers['Content-Type'] = 'aplication/json'
-       
-        return redirect('/') 
-    code = request.data
-    data_r = request.form['username']
-
-   
-    return redirect('/')
-
 
 # Google Oath2 methods and routes
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
 
-    if request.args.get('state') != login_session['state']:
-        return 'Error state doesnt match STATE'
+    login_session['state'] = state
+ 
 
+    if request.args.get('state') != login_session['state']:
+        return 'Error state doesnt match STATE', redirect('/')
+    
+    print request.args.get('state') + ' ' + login_session['state']
+    
+   
+
+    print "hello"
     token =  request.data
     # (Receive token by HTTPS POST)
     # ...
 
+    print token
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
         idinfo = id_token.verify_oauth2_token(token, requestGoogleAuth, "682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com")
@@ -113,6 +115,7 @@ def gconnect():
     
  
 
+   
     '''
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid State parameter id'), 401)
@@ -258,14 +261,11 @@ def usernameState(state):
 # creates anti forgery token state
 
 
-def currentState():
 
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                    for x in range(32))
+
 
     
 
-    return state
 
 
 # App Errro Handler
@@ -299,7 +299,7 @@ def jsonItem(category, item):
 @app.route('/intruder')
 def intruder():
 
-    state = currentState()
+    
     username = usernameState(state)
 
     return render_template('g-login.html', STATE=state, username=username)
@@ -307,10 +307,23 @@ def intruder():
 
 # Catalog and / are home routes of the application
 
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    
+    
+  
+  
+
+   
+    return render_template('g-login.html', STATE=state)
+
+
+
 @app.route('/catalog/')
 def catalog():
 
-    state = currentState()
+
     username = usernameState(state)
 
     categories = session.query(Category).all()
@@ -327,7 +340,7 @@ def catalog():
 @app.route('/')
 def index():
 
-    state = currentState()
+  
     username = usernameState(state)
 
 
@@ -343,11 +356,14 @@ def index():
         username=username)
 
 
+
+
+
 # Detail Routes
 @app.route('/catalog/<category>/items')
 def catalog_items(category):
 
-    state = currentState()
+
     username = usernameState(state)
 
     categories = session.query(Category).all()
@@ -375,7 +391,7 @@ def catalog_items(category):
 @app.route('/catalog/<category>/<item>')
 def item_description(category, item):
 
-    state = currentState()
+  
     username = usernameState(state)
 
     
@@ -481,9 +497,9 @@ def getUserID(email):
 @app.route('/add', methods=['GET', 'POST'])
 @login_required
 def add():
-    state = currentState()
-    username = usernameState(state)
-    state = currentState()
+   
+
+
     username = usernameState(state)
     user = session.query(User).filter_by(email=login_session['email']).one_or_none()
     
@@ -510,7 +526,7 @@ def add():
 @login_required
 def edit(category, item):
 
-    state = currentState()
+   
     username = usernameState(state)
     
     
@@ -543,7 +559,7 @@ def edit(category, item):
 @app.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
 @login_required
 def delete(category, item):
-    state = currentState()
+   
     username = usernameState(state)
     
 
