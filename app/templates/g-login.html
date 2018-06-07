@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
       
   <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-   <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+   <script src="//apis.google.com/js/platform.js?"> </script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
   
@@ -47,6 +47,9 @@ crossorigin="anonymous">
        
 
 <script>
+
+
+
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   var id_token = googleUser.getAuthResponse().id_token;
@@ -70,7 +73,7 @@ function onSignIn(googleUser) {
         })
 
 
-        }
+    }
 
 
 
