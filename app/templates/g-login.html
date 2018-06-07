@@ -61,20 +61,34 @@ function onSignIn(googleUser) {
             contentType: 'application/octet-stream; charset=utf-8',
             success: function(result) {
                         //Refresh Page
+               
+
              setTimeout(function() {
 
               window.location.href="/"
-         }, 
-         2000);
-                
-                console.log(result)
+                }, 2000);
+
+            },
+
+            // error handler for 500    
+            error: function(e, status){
+                if (e.status == 500)
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                console.log('User signed out due to internal error');
+                alert("There is an internal snag we are working on it, please come back later")
+                });
             }
         
+
         })
 
 
     }
 
+var onFailure = function(error) {
+    console.log(error);
+};
 
 
 
