@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+from utils import delay
 from app import app
 from flask import render_template, url_for, session, \
     request, flash, redirect, jsonify
@@ -31,11 +33,14 @@ session = Session()
 state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                 for x in range(32))
 
+
+
 # Google Oath2 methods and routes
-
-
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    '''
+    Logs In User using the Google Sign In API
+    '''
     login_session['state'] = state
 
     if request.args.get('state') != login_session['state']:
@@ -43,7 +48,7 @@ def gconnect():
 
     token = request.data
     # (Receive token by HTTPS POST)
-    # ...
+    
     
     try:
       
@@ -53,11 +58,19 @@ def gconnect():
 
         data = idinfo
 
+        """
+        Reasing the data receieved into the loggin_sesson 
+        """
 
         login_session['username'] = data['name']
         login_session['email'] = data['email']
+
+        # Create the user if User is not part of the db
         createUser(login_session['username'], login_session['email'])
         return "Success"
+        
+        
+        
         # Or, if multiple clients access the backend server:
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
         # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
@@ -81,14 +94,18 @@ def gconnect():
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
 
+    # delete the loggin_session state
+
     del login_session['username']
     del login_session['email']
 
     return "Success"
 
 
-# Check if user is currenty signed in
 def usernameState(state):
+
+    ''' Check if user is currenty signed in'''
+    
     login_session['state'] = state
 
     if "username" in login_session:
@@ -99,16 +116,27 @@ def usernameState(state):
     return username
 
 
-# App Errro Handler
+#ERROR handlers and misalenious routes
 @app.errorhandler(404)
 def not_foud(e):
+    '''  App Errro Handler '''
     return ' hahahah The classic<b> 404 NOT FOUND </b> click <a href="/" \
             style="border-color:#000;"> here </a> to go home'
 
 
-# JSON API Route
+
+@app.route('/intruder')
+def intruder():
+    '''
+        Route when an unathorize user tries to access CRUD operations
+    '''
+    username = usernameState(state)
+    return render_template('g-login.html', STATE=state, username=username)
+
+#JSON API ROUTES
 @app.route('/catalog.json/')
 def jsonCatalog():
+    ''' JSON API Route for the whole catalog collection'''
 
     category = session.query(Category).all()
     items = session.query(Item).all()
@@ -118,41 +146,18 @@ def jsonCatalog():
 
 @app.route('/catalog/<category>/<item>.json')
 def jsonItem(category, item):
+    ''' JSON API Route for a specific Item '''
     category = session.query(Category).filter_by(name=category).one_or_none()
     item = session.query(Item).filter_by(name=item).one_or_none()
     return jsonify(item=[item.serialize])
 
 
-# Route when an unathorize user tries to access CRUD operations
-@app.route('/intruder')
-def intruder():
-    username = usernameState(state)
-    return render_template('g-login.html', STATE=state, username=username)
 
 
-# Catalog and / are home routes of the application
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template('g-login.html', STATE=state)
 
-
-@app.route('/catalog/')
-def catalog():
-    username = usernameState(state)
-    categories = session.query(Category).all()
-    items = session.query(Item).all()
-
-    return render_template(
-        'index.html',
-        items=items,
-        categories=categories,
-        STATE=state,
-        username=username)
-
-
-@app.route('/')
+# user interaction routes/initial routes
 def index():
     username = usernameState(state)
     categories = session.query(Category).all()
@@ -165,14 +170,60 @@ def index():
         STATE=state,
         username=username)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    ''' 
+    the login page method,  STATE crated 
+    with the anti forgery key method
+    '''
+    return render_template('g-login.html', STATE=state)
+
+
+@app.route('/catalog/')
+def catalog():
+    '''
+    /catalog route will show everything in the database
+    username: will be analyze as a boolean in the template 
+              to see if an user is logged in
+    
+    cataegories: all the Categories on the in the database,
+                 is organizing the items in the template 
+
+    items: all items in the database wich are organize with 
+           the help of the cataegories
+
+    '''
+    username = usernameState(state)
+    categories = session.query(Category).all()
+    items = session.query(Item).all()
+
+    return render_template(
+        'index.html',
+        items=items,
+        categories=categories,
+        STATE=state,
+        username=username)
+
+
+
 
 # Detail Routes
 @app.route('/catalog/<category>/items')
 def catalog_items(category):
+    '''
+        Details holds all the details of an items
+        A specific category will be called from the database
+        
+
+    '''
     username = usernameState(state)
     categories = session.query(Category).all()
     category = session.query(Category).filter_by(name=category)
     for c in category:
+        '''
+        loops all the items localize on the specific category
+        '''
+
         categoryName = c.name
         items = session.query(Item).filter_by(category_id=c.id).all()
         itemCount = session.query(Item).filter_by(category_id=c.id).count()
@@ -242,10 +293,10 @@ def createUser(name, email):
             session.close()
 
         newUser = session.query(User).all()
-        print newUser.email + newUser.name
+        print newUser
 
     else:
-        print u.email + str(u.id)
+        print u
 
 
 def getUserInfo(user_id):
