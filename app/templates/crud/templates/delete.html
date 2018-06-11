@@ -1,0 +1,25 @@
+
+{%  extends 'base.html'  %}
+
+{% block delete %}
+<div class="row" style="padding:5%;"></div>
+        <div class="center">
+            
+            
+            <form action="#" method="post">
+                
+                <h1>Are you sure you want to delete ?  <span style="color:#E64A19;">{{item.name}}</h1>
+                    
+            
+         
+            <div style="padding-top:5%;">
+
+                <input class="btn btn-default" type="submit" value="Submit">
+                <a style="color:#001F3F !important;" href="{{url_for('item_description', category=category.name, item=item.name)}}">cancel</a>
+                
+            </div>    
+        
+        </form>
+        </div>
+    </div>
+{%endblock%}    

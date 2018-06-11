@@ -1,0 +1,38 @@
+{%  extends 'base.html'  %}
+
+    {% block edit %}
+
+<div class="row" style="padding:3%;">
+    <div class="col-md-6 col-md-offset-1 padding-top">
+        {% for c in category%}
+            {% if c.id == item.category_id  %}
+        <form action="{{url_for('edit',category=c.name, item=item.name )}}" method="post">
+                {%endif%}
+            {%endfor%}
+
+            <div class="form-group">
+               <h2> <label id="name">Name:</label> </h2>
+            </br>
+            <input type ="text" maxlength="50" class="form-control" name="name" value={{item.name}} >
+            
+        </br>
+        <h2><label for="description">Description:</label> </h2>
+    </br>
+    <textarea class="form-control" maxlength="250" rows="3" name="description" >{{item.description}}</textarea>
+</br>
+
+<select style="width:50%;" class="custom-select" name="categories" id="">
+    {% for c in category%}
+    <option value="{{c.id}}">{{c.name}}</option>
+                    {% endfor %}
+                </select> 
+                <input class="btn btn-default " type="submit" value="Submit">
+            
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+ {% endblock %}   
