@@ -2,11 +2,12 @@
 
 from flask import render_template, Blueprint
 
+
 crud_blueprint = Blueprint('crud',__name__, template_folder='templates')
 
 
-@crud_blueprint('/add', methods=['GET', 'POST'])
-@login_required
+@crud_blueprint.route('/add', methods=['GET', 'POST'])
+#@login_required
 def add():
     username = usernameState(state)
     user = session.query(User).filter_by\

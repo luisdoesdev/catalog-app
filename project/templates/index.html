@@ -1,0 +1,44 @@
+{%  extends 'base.html'  %}
+
+    {% block index %}
+       
+    <div class="row">
+            <div class="category col-lg-2  col-sm-4">
+                <h2>Categories</h2>
+                {% block login %}{% endblock %}
+                {% for c in categories %}
+                    <li><a href="{{url_for('catalog_items', category=c.name)}}">{{c.name}}</></li>
+             
+                {% endfor %}
+            </div>
+            <div class="items col-sm-6">
+                
+                <ul>    
+                        {% if username %}
+                        <h5><a href="/add">add new</a></h5>
+                        {%endif%}
+    
+                    <h2 style="color: #001F3F !important;
+                    font-weight: bold; ">Latest Items</h2>
+                 
+                        {% for i in items %}
+                    {% for c in categories %}   
+                        {% if c.id == i.category_id %}
+                     <li><a href="{{url_for('item_description', category=c.name, item=i.name)}}">{{i.name}} 
+
+                     </a> <span style="font-style:italic;">({{c.name}})
+                         
+                        {%if id%} You made this {%endif%}
+                    </span> </li>
+                        
+                        {%endif%}
+                    {% endfor %}
+                    {%endfor%}    
+                </ul>    
+            </div>
+
+        </div>
+
+    
+    
+    {% endblock %}    

@@ -1,0 +1,118 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+
+  }
+  body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color:#DDD !important;
+  }
+  a{
+    text-decoration: none !important;
+    color:#E64A19 !important;
+    }
+
+    li{
+        list-style: none;
+    }
+
+  h2 {
+      color: #001F3F !important;
+      font-weight: bold;  
+    }
+
+    li span{
+        color: rgb(106, 106, 106);
+        font-style:italic; 
+    }
+
+  .container-nav{
+      padding: 0px !important;
+  }
+
+  .container-content{
+      background-color: #fff;
+      margin-top: 5%;
+      border:  .5px solid rgb(115, 115, 115);
+      position: relative;  
+     
+  }
+  
+ .row{
+     padding-left: 1%;
+     padding-top: 5%;
+     padding-bottom:5%;  
+ }
+
+
+
+  .navbar{
+      background-color: #001F3F;
+    }
+    
+    .nav-brand{
+        font-size: 1.75em;
+        font-weight: 700;
+    }
+
+    button.#login-btn.btn-primary{
+        font-weight: bold;
+        background-color: #E64A19 !important;
+    }
+   
+    .brand-name{
+        color: #fff !important;
+        font-weight: bold;
+
+        
+    }
+    
+    .btn-default{
+        background-color: #E64A19;
+        color: #fff;
+        font-weight: bold !important;
+        
+    }
+    
+    
+    
+    
+
+
+    
+    
+    .container-fluid{
+        background-color:#fff;
+    }
+    
+    .footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      /* Set the fixed height of the footer here */
+      height: 60px;
+      line-height: 60px; /* Vertically center the text there */
+      background-color: #f5f5f;
+    }
+
+
+
+
+
+
+   /* Media Queries  */
+
+   @media screen and (max-width: 577px) {
+    
+        .items{
+            padding-top:5%; 
+        }
+       
+        .items ul{   padding-left:0;  
+           
+        }
+    
+}
