@@ -16,13 +16,12 @@ app.config['SECRET_KEY'] = "THIS SHOULD BE HIDDEN!"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-'''
 # import a blueprint that we will create
-from project.user.views import owners_blueprint
+from project.user.views import user_blueprint
 
 # register our blueprints with the application
 app.register_blueprint(user_blueprint, url_prefix='/user')
-'''
+
 @app.route('/')
 def root():
     return "HELLO BLUEPRINTS!"

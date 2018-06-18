@@ -5,3 +5,6 @@ client_secrets.json
 *.db-journal
 /venv
 /all
+.vscode
+.vagrant
+.idea
