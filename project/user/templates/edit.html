@@ -1,9 +1,7 @@
-{% extends 'base.html' %}
-
 {% block content %}
 
-<form method="POST" action="{{url_for('user.index')}}">
-    {{ form.csrf_token }}
+<form method="POST" action="{{url_for('user.show', id=user.id)}}?_method=PATCH">
+  {{ form.csrf_token }}
   <p>
     {{ form.email(placeholder="Email") }}
     <span>
@@ -15,7 +13,6 @@
     </span>
   </p>
   <p>
-  <p>
     {{ form.name(placeholder="Name") }}
     <span>
       {% if form.name.errors %}
@@ -25,7 +22,7 @@
       {% endif %}
     </span>
   </p>
-  <button type="submit">Add Owner!</button>
+  <button type="submit">Edit User!</button>
 </form>
 
 {% endblock %}
