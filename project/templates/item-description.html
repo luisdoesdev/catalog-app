@@ -1,0 +1,21 @@
+{%  extends 'base.html'  %}
+{% block itemDescription %}
+
+
+<div style="padding:4%;">
+    <h1>{{item.name}}</h1>
+    <p>{{item.description}}</p>
+
+{% if username  %}  
+    {% if id%}
+    <a href="{{url_for('edit', category=category.name, item=item.name)}}" >Edit<span style="padding:5px; color:black;"> |</span> </a>
+    
+    <a href="{{url_for('delete', category=category.name, item=item.name)}}">Delete</a> 
+    {%endif%}
+{%endif%}
+
+
+</div>
+
+
+{% endblock %}
