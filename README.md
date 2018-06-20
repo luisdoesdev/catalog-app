@@ -1,14 +1,24 @@
 # Catalog APP
 
-## This app is a project tha is part of my nanodegree program at Udacity
+This app is part of my fullstack program at Udacity.com
+The goal of the app is to hanlde CRUD and User oauth with google
+User will be able to Access CRUD if they sign up with their google accounts but with the limitiations of the inputs they add to the database, for example if User A creates item X user B will not be able to manipulate that input.
 
 ## Getting Started
 
+# pre-requisites
  Make sure you have both python2.7 and pip instal in your sytem
+ 
+ # Installing
  Just clone this repo: `git clone https://github.com/letorruella/catalog-app`
  Once that's done install the dependencies: `pip install -r requirements.txt `
  Start the database `python project/models.py` and populated it 
  with some basic data `python prject/models.py`    
+ 
+ # Run
+ run the app `python run.py`, it should look like this:
+ ![Home](home.jpg)
+ 
 
 # Tech Stack(all organized in requirements.txt)
     Vagrant for virtualization
@@ -52,9 +62,9 @@ The app is organize in very easy to nagivate folders, I looked at how other prof
     * requirements.txt that has all the libraries that are used to composed the entire aplication
     * the Vagrantfile, this project was built using Vagrant as virtual enviroments to sepparte the libraries from my local pc see https://www.vagrantup.com/ for more information on it, the configuration for this enviroment was provided by Udacity
 
-* App folder '/app'
+* project folder '/'
     * static holds the css folders where all the styles are located, nothing special here, oh and a cheesy logo I made for favicon placeholder
-    * templates holds all the .html documents 
+    * Holds all the 
     *  -___init__-.py' to make sure all folders are treated as packages
     * models.py creates the database and its relationships
     * modelstemplate.py has a couple dummy descriptions to populate the database
