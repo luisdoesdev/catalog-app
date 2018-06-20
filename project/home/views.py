@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# ../home/views.py
 
 
 from flask import render_template, url_for, session, \
@@ -15,8 +15,6 @@ home_blueprint = Blueprint(
 )
 
 
-
- 
 @home_blueprint.route('/')
 def index():
     '''
@@ -34,18 +32,17 @@ def index():
         username=username)
 
 
-
 @home_blueprint.route('/catalog/')
 def catalog():
     '''
     /catalog route will show everything in the database
-    username: will be analyze as a boolean in the template 
+    username: will be analyze as a boolean in the template
               to see if an user is logged in
-    
-    cataegories: all the Categories on the in the database,
-                 is organizing the items in the template 
 
-    items: all items in the database wich are organize with 
+    cataegories: all the Categories on the in the database,
+                 is organizing the items in the template
+
+    items: all items in the database wich are organize with
            the help of the cataegories
 
     '''
@@ -67,7 +64,7 @@ def catalog_items(category):
     '''
         Details holds all the details of an items
         A specific category will be called from the database
-        
+
 
     '''
     username = usernameState(state)
@@ -105,15 +102,13 @@ def item_description(category, item):
     ids = currentUser(item)
 
     return(render_template('item-description.html',
-           item=item, STATE=state, username=username,
-           category=category, id=ids))
-
-
+                           item=item, STATE=state, username=username,
+                           category=category, id=ids))
 
 
 def usernameState(state):
     ''' Check if user is currenty signed in'''
-    
+
     login_session['state'] = state
 
     if "username" in login_session:
@@ -122,7 +117,6 @@ def usernameState(state):
         username = False
 
     return username
-
 
 
 # User Operations
@@ -141,8 +135,8 @@ def login_required(f):
 def currentUser(item):
     username = usernameState(state)
     if username:
-        user = session.query(User).filter_by \
-            (email=login_session['email']).one_or_none()
+        user = session.query(User).filter_by(
+            email=login_session['email']).one_or_none()
         ids = user.id is item.user_id
         return ids
 
@@ -156,7 +150,7 @@ def createUser(name, email):
         session.add(newUser)
         try:
             session.commit()
-        except:
+        except BaseException:
             session.rollback()
             raise
         finally:
@@ -187,8 +181,8 @@ def getUserID(email):
 @login_required
 def add():
     username = usernameState(state)
-    user = session.query(User).filter_by\
-        (email=login_session['email']).one_or_none()
+    user = session.query(User).filter_by(
+        email=login_session['email']).one_or_none()
     category = session.query(Category).all()
     if request.method == 'POST':
         newItem = Item(
@@ -208,15 +202,19 @@ def add():
         STATE=state)
 
 
-@home_blueprint.route('/catalog/<category>/<item>/edit', methods=['GET', 'POST'])
+@home_blueprint.route(
+    '/catalog/<category>/<item>/edit',
+    methods=[
+        'GET',
+        'POST'])
 @login_required
 def edit(category, item):
     username = usernameState(state)
     category = session.query(Category).all()
     item = session.query(Item).filter_by(name=item).one_or_none()
-
+    
     if currentUser(item):
-        print "yes"
+        
 
         if request.method == 'POST':
             if request.form['name']:
@@ -241,7 +239,11 @@ def edit(category, item):
         not made yourself return <a href='/'>home</a>"
 
 
-@home_blueprint.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
+@home_blueprint.route(
+    '/catalog/<category>/<item>/delete',
+    methods=[
+        'GET',
+        'POST'])
 @login_required
 def delete(category, item):
     username = usernameState(state)
@@ -265,15 +267,12 @@ def delete(category, item):
         you have not created, return  <a href='/'> home</a>"
 
 
-
-
-#ERROR handlers and misalenious routes
+# ERROR handlers and misalenious routes
 @home_blueprint.errorhandler(404)
 def not_foud(e):
     '''  App Errro Handler '''
     return ' hahahah The classic<b> 404 NOT FOUND </b> click <a href="/" \
             style="border-color:#000;"> here </a> to go home'
-
 
 
 @home_blueprint.route('/intruder')
@@ -283,6 +282,3 @@ def intruder():
     '''
     username = usernameState(state)
     return render_template('g-login.html', STATE=state, username=username)
-
-
-

@@ -1,4 +1,4 @@
-#.../api/views.py
+# .../api/views.py
 
 # IMPORTS
 from flask import Blueprint, jsonify
@@ -10,6 +10,7 @@ api_blueprint = Blueprint(
     'api',
     __name__
 )
+
 
 @api_blueprint.route('/items.json/')
 def jsonCatalog():
@@ -26,4 +27,4 @@ def jsonItem(category, item):
     ''' JSON API Route for a specific Item '''
     category = session.query(Category).filter_by(name=category).one_or_none()
     item = session.query(Item).filter_by(name=item).one_or_none()
-    return jsonify(item=[item.serialize])    
+    return jsonify(item=[item.serialize])

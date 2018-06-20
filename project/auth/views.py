@@ -14,10 +14,6 @@ from google.auth.transport import requests
 requestGoogleAuth = requests.Request()
 
 
-
-
-
-
 auth_blueprint = Blueprint(
     'auth',
     __name__,
@@ -27,13 +23,11 @@ auth_blueprint = Blueprint(
 
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    ''' 
-    the login page method,  STATE crated 
+    '''
+    the login page method,  STATE crated
     with the anti forgery key method
     '''
     return render_template('g-login.html', STATE=state)
-
-
 
 
 # Google Oath2 methods and routes
@@ -49,18 +43,19 @@ def gconnect():
 
     token = request.data
     # (Receive token by HTTPS POST)
-    
-    
+
     try:
-      
+
         # Specify the CLIENT_ID of the app that accesses the backend:
-        idinfo = id_token.verify_oauth2_token(token, requestGoogleAuth,
-        "682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com")
+        idinfo = id_token.verify_oauth2_token(
+            token,
+            requestGoogleAuth,
+            "682221223878-pl3rgk5qvvgme87832b2jeegjejs62og.apps.googleusercontent.com")
 
         data = idinfo
 
         """
-        Reasing the data receieved into the loggin_sesson 
+        Reasing the data receieved into the loggin_sesson
         """
 
         login_session['username'] = data['name']
@@ -69,9 +64,7 @@ def gconnect():
         # Create the user if User is not part of the db
         createUser(login_session['username'], login_session['email'])
         return "Success"
-        
-        
-        
+
         # Or, if multiple clients access the backend server:
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
         # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
@@ -91,6 +84,7 @@ def gconnect():
         # Invalid token
         pass
 
+
 @auth_blueprint.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
 
@@ -102,12 +96,11 @@ def gdisconnect():
     return "Success"
 
 
-
 def createUser(name, email):
     '''
     Check if User is in datbase
     if not
-    It will add him/her 
+    It will add him/her
     '''
     u = session.query(User).filter_by(email=email).one_or_none()
     if u is None:
@@ -117,7 +110,7 @@ def createUser(name, email):
         session.add(newUser)
         try:
             session.commit()
-        except:
+        except BaseException:
             session.rollback()
             raise
         finally:
