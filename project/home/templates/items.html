@@ -6,7 +6,7 @@
              <div class="category col-lg-2  col-md-4 col-sm-4">
             <h2>Categories</h2>
             {% for c in categories %}
-                <li><a href="{{url_for('catalog_items', category=c.name)}}">
+                <li><a href="{{url_for('home.catalog_items', category=c.name)}}">
                     {{c.name}}
                 </a></li>
          
@@ -18,7 +18,7 @@
             <ul>
             {% for i in items %} 
                 <li>
-                   <a href="{{url_for('item_description',category=categoryName, item=i.name)}}"> {{i.name}}</a>
+                   <a href="{{url_for('home.item_description',category=categoryName, item=i.name)}}"> {{i.name}}</a>
                 </li>
                 
             {% endfor %}

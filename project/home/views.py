@@ -1,46 +1,68 @@
 #!/usr/bin/env python
 
-from project import app
+
 from flask import render_template, url_for, session, \
-    request, flash, redirect, jsonify
+    request, flash, redirect, jsonify, Blueprint
 from flask import session as login_session
+from project import state, session
+from project.models import Base, User, Category, Item
 from functools import wraps
-import random
-import string
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-from project import state
-import httplib2
-import json
-from flask import make_response
-import requests
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from models import Base, User, Category, Item
 
-engine = create_engine('sqlite:///models.db?check_same_thread=False')
-Base.metadata.bind = engine
-Session = sessionmaker(bind=engine)
-session = Session()
+home_blueprint = Blueprint(
+    'home',
+    __name__,
+    template_folder='templates'
+)
 
 
 
+ 
+@home_blueprint.route('/')
+def index():
+    '''
+        User Initial Route
+    '''
+    username = usernameState(state)
+    categories = session.query(Category).all()
+    items = session.query(Item).all()
+
+    return render_template(
+        'index.html',
+        items=items,
+        categories=categories,
+        STATE=state,
+        username=username)
 
 
 
+@home_blueprint.route('/catalog/')
+def catalog():
+    '''
+    /catalog route will show everything in the database
+    username: will be analyze as a boolean in the template 
+              to see if an user is logged in
+    
+    cataegories: all the Categories on the in the database,
+                 is organizing the items in the template 
 
+    items: all items in the database wich are organize with 
+           the help of the cataegories
 
+    '''
+    username = usernameState(state)
+    categories = session.query(Category).all()
+    items = session.query(Item).all()
 
-
-
-
-
-
-
+    return render_template(
+        'index.html',
+        items=items,
+        categories=categories,
+        STATE=state,
+        username=username)
 
 
 # Detail Routes
-@app.route('/catalog/<category>/items')
+@home_blueprint.route('/catalog/<category>/items')
 def catalog_items(category):
     '''
         Details holds all the details of an items
@@ -75,7 +97,7 @@ def catalog_items(category):
         username=username)
 
 
-@app.route('/catalog/<category>/<item>')
+@home_blueprint.route('/catalog/<category>/<item>')
 def item_description(category, item):
     username = usernameState(state)
     category = session.query(Category).filter_by(name=category).one_or_none()
@@ -85,6 +107,22 @@ def item_description(category, item):
     return(render_template('item-description.html',
            item=item, STATE=state, username=username,
            category=category, id=ids))
+
+
+
+
+def usernameState(state):
+    ''' Check if user is currenty signed in'''
+    
+    login_session['state'] = state
+
+    if "username" in login_session:
+        username = True
+    else:
+        username = False
+
+    return username
+
 
 
 # User Operations
@@ -145,7 +183,7 @@ def getUserID(email):
 
 
 # CRUD Operations
-@app.route('/add', methods=['GET', 'POST'])
+@home_blueprint.route('/add', methods=['GET', 'POST'])
 @login_required
 def add():
     username = usernameState(state)
@@ -162,7 +200,7 @@ def add():
 
         session.add(newItem)
         session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('home.index'))
     return render_template(
         'add.html',
         category=category,
@@ -170,7 +208,7 @@ def add():
         STATE=state)
 
 
-@app.route('/catalog/<category>/<item>/edit', methods=['GET', 'POST'])
+@home_blueprint.route('/catalog/<category>/<item>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(category, item):
     username = usernameState(state)
@@ -191,7 +229,7 @@ def edit(category, item):
             session.add(item)
             session.commit()
 
-            return redirect(url_for('index'))
+            return redirect(url_for('home.index'))
         return render_template(
             'edit.html',
             item=item,
@@ -203,7 +241,7 @@ def edit(category, item):
         not made yourself return <a href='/'>home</a>"
 
 
-@app.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
+@home_blueprint.route('/catalog/<category>/<item>/delete', methods=['GET', 'POST'])
 @login_required
 def delete(category, item):
     username = usernameState(state)
@@ -229,9 +267,8 @@ def delete(category, item):
 
 
 
-
 #ERROR handlers and misalenious routes
-@app.errorhandler(404)
+@home_blueprint.errorhandler(404)
 def not_foud(e):
     '''  App Errro Handler '''
     return ' hahahah The classic<b> 404 NOT FOUND </b> click <a href="/" \
@@ -239,12 +276,13 @@ def not_foud(e):
 
 
 
-@app.route('/intruder')
+@home_blueprint.route('/intruder')
 def intruder():
     '''
         Route when an unathorize user tries to access CRUD operations
     '''
     username = usernameState(state)
     return render_template('g-login.html', STATE=state, username=username)
+
 
 

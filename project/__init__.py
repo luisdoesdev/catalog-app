@@ -10,7 +10,6 @@ from sqlalchemy.orm import sessionmaker
 from models import Base, User, Category, Item
 from flask import session as login_session
 
-
 engine = create_engine('sqlite:///models.db?check_same_thread=False')
 Base.metadata.bind = engine
 Session = sessionmaker(bind=engine)
@@ -32,17 +31,37 @@ state = ''.join(random.choice(string.ascii_uppercase + string.digits)
 
 
 
-# RPUTES
-from project import routes
+# Blueprint Imports
+#from project import routes
+from project.home.views import home_blueprint
 from project.auth.views import auth_blueprint
 from project.api.views import api_blueprint
 
-# API ROUTES
 
 
-# API ROUTES
-app.register_blueprint(api_blueprint, url_prefix='/api')
+#  ROUTES
+app.register_blueprint(home_blueprint, url_prefix='/')
 app.register_blueprint(auth_blueprint, url_prefix='/auth')
+app.register_blueprint(api_blueprint, url_prefix='/api')
+
+
+
+#ERROR handlers and misalenious routes
+@app.errorhandler(404)
+def not_foud(e):
+    '''  App Errro Handler '''
+    return ' hahahah The classic<b> 404 NOT FOUND </b> click <a href="/" \
+            style="border-color:#000;"> here </a> to go home'
+
+
+
+@app.route('/intruder')
+def intruder():
+    '''
+        Route when an unathorize user tries to access CRUD operations
+    '''
+    username = usernameState(state)
+    return render_template('g-login.html', STATE=state, username=username)
 
 
 
