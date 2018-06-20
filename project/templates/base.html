@@ -29,7 +29,7 @@
                 onclick="signOut();">Sign out</a>
                {%else %}
 
-               <form action="/login">
+               <form action="/auth/login">
              
                 <button 
                     type="submit"
@@ -111,7 +111,7 @@ function signOut() {
 
           $.ajax({
           type:"POST",
-          url:'/gdisconnect',
+          url:'/auth/gdisconnect',
           success: function(){
               //Refresh Page
              setTimeout(function() {

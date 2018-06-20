@@ -2,7 +2,7 @@
 
 # IMPORTS
 from flask import Blueprint, jsonify
-from project.routes import session
+from project import session
 from project.models import Base, User, Category, Item
 
 # BLuprint Route SETUP

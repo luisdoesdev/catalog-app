@@ -55,7 +55,7 @@ function onSignIn(googleUser) {
   var id_token = googleUser.getAuthResponse().id_token;
         $.ajax({
             type: 'POST',
-            url: '/gconnect?state={{STATE}}',
+            url: '/auth/gconnect?state={{STATE}}',
             processData: false,
             data: id_token,
             contentType: 'application/octet-stream; charset=utf-8',

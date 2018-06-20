@@ -9,6 +9,7 @@ import random
 import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from project import state
 import httplib2
 import json
 from flask import make_response
@@ -16,11 +17,6 @@ import requests
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, User, Category, Item
-from google.oauth2 import id_token
-from google.auth.transport import requests
-# I dont want to confused the  two request modules I have imported
-requestGoogleAuth = requests.Request()
-
 
 engine = create_engine('sqlite:///models.db?check_same_thread=False')
 Base.metadata.bind = engine
@@ -28,16 +24,8 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-# anti forgery
-state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                for x in range(32))
 
-# import a blueprint that we will create
-from project.api.views import api_blueprint
-
-# API ROUTES
-app.register_blueprint(api_blueprint, url_prefix='/api')
-
+#
 # Google Oath2 methods and routes
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
