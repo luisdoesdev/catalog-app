@@ -2,6 +2,13 @@
 
 ## This app is a project tha is part of my nanodegree program at Udacity
 
+## Getting Started
+
+ Make sure you have both python2.7 and pip instal in your sytem
+ Just clone this repo: `git clone https://github.com/letorruella/catalog-app`
+ Once that's done install the dependencies: `pip install -r requirements.txt `
+ Start the database `python project/models.py` and populated it 
+ with some basic data `python prject/models.py`    
 
 # Tech Stack(all organized in requirements.txt)
     Vagrant for virtualization
