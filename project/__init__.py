@@ -34,23 +34,8 @@ from project.api.views import api_blueprint
 
 
 #  ROUTES
-app.register_blueprint(home_blueprint, url_prefix='/')
+app.register_blueprint(home_blueprint, url_prefix='')
 app.register_blueprint(auth_blueprint, url_prefix='/auth')
 app.register_blueprint(api_blueprint, url_prefix='/api')
 
 
-# ERROR handlers and misalenious routes
-@app.errorhandler(404)
-def not_foud(e):
-    '''  App Errro Handler '''
-    return ' hahahah The classic<b> 404 NOT FOUND </b> click <a href="/" \
-            style="border-color:#000;"> here </a> to go home'
-
-
-@app.route('/intruder')
-def intruder():
-    '''
-        Route when an unathorize user tries to access CRUD operations
-    '''
-    username = usernameState(state)
-    return render_template('g-login.html', STATE=state, username=username)

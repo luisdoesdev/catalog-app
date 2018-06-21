@@ -31,6 +31,10 @@ def index():
         STATE=state,
         username=username)
 
+@home_blueprint.route('/')
+def test():
+    return 'hello'
+
 
 @home_blueprint.route('/catalog/')
 def catalog():
@@ -107,7 +111,9 @@ def item_description(category, item):
 
 
 def usernameState(state):
-    ''' Check if user is currenty signed in'''
+    '''
+     Check if user is currenty signed in
+    '''
 
     login_session['state'] = state
 
