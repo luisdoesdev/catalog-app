@@ -47,7 +47,7 @@ class Item(Base):
     id = Column(
         Integer, primary_key=True
     )
-    description = Column(String(250))
+    description = Column(String(350))
 
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
@@ -65,5 +65,5 @@ class Item(Base):
         }
 
 
-engine = create_engine('sqlite:///models.db')
+engine = create_engine('postgresql+psycopg2://catalog:123456@/catalog')
 Base.metadata.create_all(engine)

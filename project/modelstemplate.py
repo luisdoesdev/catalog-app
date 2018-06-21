@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from models import Category, Base, Item, User
 
-engine = create_engine('sqlite:///models.db')
+engine = create_engine('postgresql+psycopg2://catalog:123456@/catalog')
 
 Base.metadata.bind = engine
 
@@ -46,7 +46,7 @@ session.commit()
 item3 = Item(
     user_id=1,
     name='Deck',
-    description='Give your skate complete a responsive update with the new Deathwish Gang Logo Mamba skateboard deck. Give your tricks some stylish flare with the floral rose and Deathwish gang logo graphic on a 7-ply maple constructed deck that has a medium concave shape.',
+    description='Give your skate complete a responsive update with the new Deathwish Gang',
     category=category2)
 session.add(item3)
 session.commit()
