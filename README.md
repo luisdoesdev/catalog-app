@@ -1,8 +1,8 @@
 # Catalog APP
 
 This app is part of my fullstack program at Udacity.com
-The goal of the app is to hanlde CRUD and User oauth with google
-User will be able to Access CRUD if they sign up with their google accounts but with the limitiations of the inputs they add to the database, for example if User A creates item X user B will not be able to manipulate that input.
+The goal of the app is to handle CRUD and User oauth with google
+User will be able to perfomr CRUD commands if they sign up with their google accounts but with the limitiations of the inputs they add to the database, for example if User A creates item X user B will not be able to manipulate that input.
 
 ## Getting Started
 
