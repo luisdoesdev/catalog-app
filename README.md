@@ -7,12 +7,18 @@ User will be able to perfomr CRUD commands if they sign up with their google acc
 ## Getting Started
 
 # pre-requisites
- Make sure you have both python2.7 and pip instal in your sytem
+ Make sure you have both python2.7 and pip installed in your system
+ 
+ Create a database with Postgres 
  
  # Installing
+ 
  Just clone this repo: `git clone https://github.com/letorruella/catalog-app`
+ 
  Once that's done install the dependencies: `pip install -r requirements.txt `
+ 
  Start the database `python project/models.py` and populated it 
+ 
  with some basic data `python prject/models.py`    
  
  # Run
