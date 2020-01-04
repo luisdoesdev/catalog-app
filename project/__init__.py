@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from models import Base, User, Category, Item
 from flask import session as login_session
 
-engine = create_engine('postgresql+psycopg2://catalog:123456@/catalog')
+engine = create_engine('postgresql+psycopg2://vagrant:123456@/catalog')
 Base.metadata.bind = engine
 Session = sessionmaker(bind=engine)
 session = Session()

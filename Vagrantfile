@@ -4,9 +4,9 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-16.04-i386"
   config.vm.box_version = "= 2.3.5"
-  config.vm.network "forwarded_port", guest: 8000, host: 9000, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port", guest: 8080, host: 9090, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port", guest: 5000, host: 3000, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8000, host: 5000, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8080, host: 5050, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5000, host: 6000, host_ip: "127.0.0.1"
 
   # Work around disconnected virtual network cable.
   config.vm.provider "virtualbox" do |vb|
@@ -32,8 +32,8 @@ Vagrant.configure("2") do |config|
     pip2 install flask packaging oauth2client redis passlib flask-httpauth
     pip2 install sqlalchemy flask-sqlalchemy psycopg2 bleach requests
 
-    su postgres -c 'createuser -dRS vagrant'
-    su vagrant -c 'createdb'
+    su postgres -c 'createuser -dRS vagrant with password 123456 '
+    su vagrant -c 'createdb catalog'
     
     vagrantTip="[35m[1mThe shared directory is located at /vagrant\\nTo access your shared files: cd /vagrant[m"
     echo -e $vagrantTip > /etc/motd

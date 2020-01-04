@@ -35,7 +35,8 @@ class Category(Base):
     def serialize(self):
         return{
             'name': self.name,
-            'id': self.id
+            'id': self.id,
+            
         }
 
 
@@ -48,7 +49,7 @@ class Item(Base):
         Integer, primary_key=True
     )
     description = Column(String(350))
-
+    picture = Column(String(350))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
@@ -61,9 +62,10 @@ class Item(Base):
         return{
             'name': self.name,
             'decription': self.description,
-            'id': self.id
+            'picture':self.picture,
+            'id': self.id,
         }
 
 
-engine = create_engine('postgresql+psycopg2://catalog:123456@/catalog')
+engine = create_engine('postgresql+psycopg2://vagrant:123456@localhost/catalog')
 Base.metadata.create_all(engine)
