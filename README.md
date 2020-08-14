@@ -79,3 +79,16 @@ The app is organize in very easy to nagivate folders, I looked at how other prof
 ## Functionalities
 
 The user has the ability to browse thru the app without logging in, in order to access CRUD operations, he/she will have to login using a google account
+
+## TODO
+ * Upgrade Python
+ * Update Design
+ * Add a Cart
+ * Add a Blog
+ * Automate the creation of the DB
+
+---
+## Design
+
+[LINK]: https://www.figma.com/file/l79JiT9r4T49zr1hKIq0BC/Catalog-App?node-id=0%3A1
+![design](/Users/letorruella/Desktop/catalog-app/Screnshot.png)
