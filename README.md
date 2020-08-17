@@ -19,7 +19,7 @@ User will be able to perfomr CRUD commands if they sign up with their google acc
  
  Start the database `python project/models.py` and populated it 
  
- with some basic data `python prject/models.py`    
+ with some basic data `python project/modelstemplate.py`    
  
  # Run
  run the app `python run.py`, it should look like this:
@@ -81,14 +81,16 @@ The app is organize in very easy to nagivate folders, I looked at how other prof
 The user has the ability to browse thru the app without logging in, in order to access CRUD operations, he/she will have to login using a google account
 
 ## TODO
- * Upgrade Python
+ * Upgrade to  Python3
  * Update Design
+ * Fix Sign Issues
  * Add a Cart
  * Add a Blog
  * Automate the creation of the DB
-
+ * Add PGAdmin
+ * Sudo issue on Machine
 ---
 ## Design
 
 [LINK]: https://www.figma.com/file/l79JiT9r4T49zr1hKIq0BC/Catalog-App?node-id=0%3A1
-![design](/Users/letorruella/Desktop/catalog-app/Screnshot.png)
+![design](/Users/letorruella/Desktop/catalog-app/screenshot.png)

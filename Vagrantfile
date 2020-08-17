@@ -32,8 +32,9 @@ Vagrant.configure("2") do |config|
     pip2 install flask packaging oauth2client redis passlib flask-httpauth
     pip2 install sqlalchemy flask-sqlalchemy psycopg2 bleach requests
 
-    su postgres -c 'createuser -dRS vagrant with password 123456 '
-    su vagrant -c 'createdb catalog'
+    sudo -u postgres bash -c "psql -c \"CREATE USER vagrant WITH PASSWORD 'vagrant';\""
+    sudo -u postgres bash -c "psql -c \"ALTER USER vagrant with SUPERUSER;\""
+    sudo su vagrant -c 'createdb catalog'
     
     vagrantTip="[35m[1mThe shared directory is located at /vagrant\\nTo access your shared files: cd /vagrant[m"
     echo -e $vagrantTip > /etc/motd
@@ -43,6 +44,9 @@ Vagrant.configure("2") do |config|
     cd redis-stable
     make
     make install
+
+    # Install PGAdmin
+    # sudo apt-get install postgresql-11 pgadmin4 --y 
 
     echo "Done installing your virtual machine!"
   SHELL
