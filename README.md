@@ -6,6 +6,7 @@ User will be able to perfomr CRUD commands if they sign up with their google acc
 
 ## Getting Started
 
+
 # pre-requisites
  Make sure you have both python2.7 and pip installed in your system
  
@@ -89,8 +90,17 @@ The user has the ability to browse thru the app without logging in, in order to 
  * Automate the creation of the DB
  * Add PGAdmin
  * Sudo issue on Machine
+ * Add Search Feature
+ * Add React
+ * Add Recomendation System
+ * Add User Managment
+ * Update Bento
+
 ---
 ## Design
 
 [LINK]: https://www.figma.com/file/l79JiT9r4T49zr1hKIq0BC/Catalog-App?node-id=0%3A1
-![design](/Users/letorruella/Desktop/catalog-app/screenshot.png)
+![design](screenshot.png)
+
+---
+## [Changelog] : changelog.md
