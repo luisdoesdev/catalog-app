@@ -163,10 +163,10 @@ def createUser(name, email):
             session.close()
 
         newUser = session.query(User).all()
-        print newUser
+        print(newUser)
 
     else:
-        print u
+        print(u)
 
 
 def getUserInfo(user_id):

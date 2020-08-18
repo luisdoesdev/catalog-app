@@ -54,4 +54,4 @@ item3 = Item(
 session.add(item3)
 session.commit()
 
-print 'added items'
+print('added items')

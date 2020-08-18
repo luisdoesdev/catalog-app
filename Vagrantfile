@@ -21,6 +21,9 @@ Vagrant.configure("2") do |config|
     DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
     apt-get -qqy install make zip unzip postgresql
+    apt install postgresql postgresql-contrib
+
+
 
     echo '==========='
     echo '==========='
@@ -31,12 +34,17 @@ Vagrant.configure("2") do |config|
     apt update
     apt-get -qqy install python3.8 python3-pip
     update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
+    apt install libpq-dev python3.8-dev -y
+
+       
+    
+    apt update
+    apt install python-pip -y
 
 
-
-    pip3 install --upgrade pip
-    pip3 install flask packaging oauth2client redis passlib flask-httpauth
-    pip3 install sqlalchemy flask-sqlalchemy psycopg2 bleach requests
+    pip install --upgrade pip
+    pip install flask packaging oauth2client redis passlib flask-httpauth
+    pip install sqlalchemy flask-sqlalchemy psycopg2-binary psycopg2 bleach requests
 
     echo '==========='
     echo '==========='
@@ -45,15 +53,15 @@ Vagrant.configure("2") do |config|
     # apt-get -qqy install python python-pip
     # pip2 install --upgrade pip
     # pip2 install flask packaging oauth2client redis passlib flask-httpauth
-    # pip2 install sqlalchemy flask-sqlalchemy psycopg2 bleach requests
+    # pip2 install sqlalchemy flask-sqlalchemy psycopg2-binary psycopg2 bleach requests
 
     echo '==========='
     echo '==========='
     echo '======= Creating Postgres settings ===='
     echo '  '
-    su -u postgres bash -c "psql -c \"CREATE USER vagrant WITH PASSWORD 'vagrant';\""
-    su -u postgres bash -c "psql -c \"ALTER USER vagrant with SUPERUSER;\""
-    vagrant -c 'createdb catalog'
+    sudo -u postgres psql -c  "CREATE USER vagrant WITH PASSWORD 'vagrant';"
+    sudo -u postgres psql -c "ALTER USER vagrant with SUPERUSER;"
+    sudo -u vagrant createdb  catalog
 
     echo '==========='
     echo '==========='
@@ -62,11 +70,11 @@ Vagrant.configure("2") do |config|
     vagrantTip="[35m[1mThe shared directory is located at /vagrant\\nTo access your shared files: cd /vagrant[m"
     echo -e $vagrantTip > /etc/motd
 
-    wget http://download.redis.io/redis-stable.tar.gz
-    tar xvzf redis-stable.tar.gz
-    cd redis-stable
-    make
-    make install
+    # wget http://download.redis.io/redis-stable.tar.gz
+    # tar xvzf redis-stable.tar.gz
+    # cd redis-stable
+    # make
+    # make install
 
     # Install PGAdmin
     # sudo apt-get install postgresql-11 pgadmin4 --y 

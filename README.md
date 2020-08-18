@@ -1,33 +1,43 @@
 # Catalog APP
 
-This app is part of my fullstack program at Udacity.com
+This app was part of my fullstack program at Udacity.co
 The goal of the app is to handle CRUD and User oauth with google
-User will be able to perfomr CRUD commands if they sign up with their google accounts but with the limitiations of the inputs they add to the database, for example if User A creates item X user B will not be able to manipulate that input.
+User will be able to perform CRUD commands if they sign up with their google accounts but with the limitiations of the inputs they add to the database, for example if User A creates item X user B will not be able to manipulate that input.
 
-## Getting Started
+In the latest version I am updating the app with modern stack and practices. To see the changes look at the [changelog]('change.md') or the `git log --oneline`. A blog and video series explaining how it was made from scratch is on the work. Stay tuned.
+
+# Getting Started
 
 
-# pre-requisites
- Make sure you have both python2.7 and pip installed in your system
- 
- Create a database with Postgres 
- 
- # Installing
+## pre-requisites
+ Install Vagrant's latest version fof [Vagrant](https://www.vagrantup.com/) and  [Virtual Box](https://www.virtualbox.org/)   
+
+## Installing
  
  Just clone this repo: `git clone https://github.com/letorruella/catalog-app`
+
+### Setup Server
+
+ Start vagrant `vagrant up`
+ 
+ Shh into it `vagrant ssh`
+
+ ### Setup App
  
  Once that's done install the dependencies: `pip install -r requirements.txt `
  
- Start the database `python project/models.py` and populated it 
+ Setup the database `python project/models.py` 
  
- with some basic data `python project/modelstemplate.py`    
+ Add some data `python project/modelstemplate.py`    
  
- # Run
+ ### Run
  run the app `python run.py`, it should look like this:
- ![Home](home.jpg)
+ 
  
 
 # Tech Stack(all organized in requirements.txt)
+Checkout the [Vagrantfile](Vagrantfile) and the [requirements.txt](requirements.txt) for more info
+
     Vagrant for virtualization
     autopep8 to comply with pep8(not in requirements.txt)
     HTML CSS and JavaScript 
@@ -82,19 +92,20 @@ The app is organize in very easy to nagivate folders, I looked at how other prof
 The user has the ability to browse thru the app without logging in, in order to access CRUD operations, he/she will have to login using a google account
 
 ## TODO
- * Upgrade to  Python3
- * Update Design
- * Fix Sign Issues
- * Add a Cart
- * Add a Blog
- * Automate the creation of the DB
- * Add PGAdmin
- * Sudo issue on Machine
- * Add Search Feature
- * Add React
- * Add Recomendation System
- * Add User Managment
- * Update Bento
+ * ~~[*]Upgrade to  Python3~~
+ * ~~[*]Update Bento~~
+ * ~~[*]Sudo issue on Machine~~
+ * [ ]Update Design
+ * [ ]Fix Sign Issues
+ * [ ]Add a Cart
+ * [ ]Add a Blog
+ * [ ]Automate the creation of the DB
+ * [ ]Add PGAdmin
+ * [ ]Add Search Feature
+ * [ ]Add React
+ * [ ]Add Recomendation System
+ * [ ]Add User Managment
+ 
 
 ---
 ## Design
