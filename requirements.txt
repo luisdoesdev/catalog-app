@@ -44,7 +44,7 @@ python-debian==0.1.32
 pyxdg==0.25
 PyYAML==3.12
 redis==3.5.3
-requests==2.18.4
+requests==2.20.0
 requests-unixsocket==0.1.5
 rsa==3.4.2
 SecretStorage==2.3.1
