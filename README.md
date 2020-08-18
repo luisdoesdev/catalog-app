@@ -22,6 +22,8 @@ In the latest version I am updating the app with modern stack and practices. To 
  
  Shh into it `vagrant ssh`
 
+ If you want to nuke the box `vagrant destroy`
+
  ### Setup App
  
  Once that's done install the dependencies: `pip install -r requirements.txt `
@@ -38,34 +40,36 @@ In the latest version I am updating the app with modern stack and practices. To 
 # Tech Stack(all organized in requirements.txt)
 Checkout the [Vagrantfile](Vagrantfile) and the [requirements.txt](requirements.txt) for more info
 
-    Vagrant for virtualization
-    autopep8 to comply with pep8(not in requirements.txt)
-    HTML CSS and JavaScript 
-    bleach==2.1.2
-    cachetools==2.0.1
-    certifi==2018.1.18chardet==3.0.4
-    click==6.7
-    Flask==0.12.2
-    Flask-HTTPAuth==3.2.3
-    Flask-SQLAlchemy==2.3.2
-    google-auth==1.4.1
-    html5lib==1.0.1httplib2==0.10.3idna==2.6itsdangerous==0.24Jinja2==2.10
-    MarkupSafe==1.0
-    oauth2client==4.1.2
-    packaging==16.8
-    passlib==1.7.1
-    psycopg2==2.7.4
-    pyasn1==0.4.2
-    pyasn1-modules==0.2.1
-    pyparsing==2.2.0
-    redis==2.10.6
-    requests==2.18.4
-    rsa==3.4.2
-    six==1.11.0
-    SQLAlchemy==1.2.2
-    urllib3==1.22
-    webencodings==0.5.1
-    Werkzeug==0.14.1
+   
+    cachetools
+    certifi
+    chardet
+    click
+    FLask
+    Flask-HTTPAuth
+    Flask-SQLAlchemy
+    google-auth
+    html5lib
+    httplib2
+    dna
+    itsdangerous
+    Jinja2
+    MarkupSafe
+    oauth2client
+    packaging
+    passlib
+    psycopg2
+    pyasn1
+    pyasn1-modules
+    pyparsing
+    requests
+    rsa
+    six
+    SQLAlchemy
+    urllib3
+    webencodings
+    Werkzeug
+
 
 
 # Overview 
@@ -113,5 +117,3 @@ The user has the ability to browse thru the app without logging in, in order to 
 [LINK]: https://www.figma.com/file/l79JiT9r4T49zr1hKIq0BC/Catalog-App?node-id=0%3A1
 ![design](screenshot.png)
 
----
-## [Changelog] : changelog.md

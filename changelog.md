@@ -5,3 +5,4 @@
 * Update python2.7 to python3.8
 * Udate bento box from bento/ubuntu-16.04 to bento/ubuntu-18.04
 * Refactor Vagrant script to install latest depenencies
+* Remove bleach

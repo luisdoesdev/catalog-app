@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
 
     pip install --upgrade pip
     pip install flask packaging oauth2client redis passlib flask-httpauth
-    pip install sqlalchemy flask-sqlalchemy psycopg2-binary psycopg2 bleach requests
+    pip install sqlalchemy flask-sqlalchemy psycopg2-binary psycopg2  requests
 
     echo '==========='
     echo '==========='
