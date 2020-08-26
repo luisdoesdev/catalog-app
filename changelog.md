@@ -6,3 +6,4 @@
 * Udate bento box from bento/ubuntu-16.04 to bento/ubuntu-18.04
 * Refactor Vagrant script to install latest depenencies
 * Remove bleach
+* Install React, Redux and React Router

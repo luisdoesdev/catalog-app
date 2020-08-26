@@ -4,13 +4,13 @@ This app was part of my fullstack program at Udacity.co
 The goal of the app is to handle CRUD and User oauth with google
 User will be able to perform CRUD commands if they sign up with their google accounts but with the limitiations of the inputs they add to the database, for example if User A creates item X user B will not be able to manipulate that input.
 
-In the latest version I am updating the app with modern stack and practices. To see the changes look at the [changelog]('change.md') or the `git log --oneline`. A blog and video series explaining how it was made from scratch is on the work. Stay tuned.
+In the latest version I am updating the app with modern stack and practices. To see the changes look at the [changelog]('changelog.md') or the `git log --oneline`. A blog and video series explaining how it was made from scratch is on the work. Stay tuned.
 
 # Getting Started
 
 
 ## pre-requisites
- Install Vagrant's latest version fof [Vagrant](https://www.vagrantup.com/) and  [Virtual Box](https://www.virtualbox.org/)   
+ Install latest version fof [Vagrant](https://www.vagrantup.com/) and  [Virtual Box](https://www.virtualbox.org/)   
 
 ## Installing
  
@@ -96,19 +96,20 @@ The app is organize in very easy to nagivate folders, I looked at how other prof
 The user has the ability to browse thru the app without logging in, in order to access CRUD operations, he/she will have to login using a google account
 
 ## TODO
- * ~~[*]Upgrade to  Python3~~
- * ~~[*]Update Bento~~
- * ~~[*]Sudo issue on Machine~~
- * [ ]Update Design
- * [ ]Fix Sign Issues
- * [ ]Add a Cart
- * [ ]Add a Blog
- * [ ]Automate the creation of the DB
- * [ ]Add PGAdmin
- * [ ]Add Search Feature
- * [ ]Add React
- * [ ]Add Recomendation System
- * [ ]Add User Managment
+ * ~~[*]    Upgrade to  Python3~~
+ * ~~[*]    Update Bento~~
+ * ~~[*]    Sudo issue on Machine~~
+ * [ ]  Update Design
+ * [ ]  Fix Sign Issues
+ * [ ]  Add a Cart
+ * [ ]  Add a Blog
+ * [ ]  Automate the creation of the DB
+ * [ ]  Add PGAdmin
+ * [ ]  Add Search Feature
+ * ~~[*] Add React~~
+ * [ ]  Add Recomendation System
+ * [ ] Add User Managment
+ * [ ] [Config React's WebPack for Vagrant reload](https://dev.to/nodewarrior/override-cra-and-add-webpack-config-without-ejecting-2f3n )
  
 
 ---
