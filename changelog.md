@@ -7,3 +7,4 @@
 * Refactor Vagrant script to install latest depenencies
 * Remove bleach
 * Install React, Redux and React Router
+* Install TailwindCSS
