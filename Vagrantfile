@@ -5,9 +5,15 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-18.04"
   config.vm.box_version = ">=0" #DeffaultVersion
   config.vm.network "forwarded_port", guest: 8000, host: 9000, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8888, host: 9797, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 8080, host: 9090, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 5000, host: 6000, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 3000, host: 7000, host_ip: "127.0.0.1"
+  
+  # HEROKU PUSH
+  config.push.define "heroku" do |push|
+    push.app = "my_application"
+  end
 
   # Work around disconnected virtual network cable.
   config.vm.provider "virtualbox" do |vb|
@@ -92,3 +98,4 @@ Vagrant.configure("2") do |config|
     echo "Done installing your virtual machine!"
   SHELL
 end
+
