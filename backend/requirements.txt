@@ -16,7 +16,7 @@ MarkupSafe
 oauth2client
 packaging
 passlib
-psycopg2
+psycopg2-binary
 pyasn1
 pyasn1-modules
 pyparsing
