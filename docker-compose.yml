@@ -1,8 +1,30 @@
-# docker-compose.yaml
-version: '3'
+# creating a volume to be able to persist data between Postgres container restarts
+volumes:
+  todos-vol:
 
 services:
-  web:
-    build: '.'
+
+  pgsql:
+    image: postgres:12.11
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: pwd # environment variable that sets the superuser password for PostgreSQL
+      POSTGRES_USER: usr # variable that will create the specified user
+      POSTGRES_DB: todos # the name of your db
+    volumes:
+      - todos-vol:/var/lib/postgresql/data
     ports:
-      - '5000:5000'
+      - 5432:5432
+  
+  backend:
+    # we are not going to use the Python image as is but rather tweak one to our needs
+    build: 
+      context: ./backend
+    depends_on:
+      - pgsql
+    # using port 80 for convenience so we can access localhost directly without specifying the port
+    ports:
+      - 8080:8080
+    # the Flask app' code will go into the `app` folder of your project and be mapped to `/usr/src/app` in the container
+    volumes:
+      - ./app:/usr/src/app
